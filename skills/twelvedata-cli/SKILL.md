@@ -1,6 +1,6 @@
 ---
 name: twelvedata-cli
-description: Use when querying Twelve Data from the terminal via the twelvedata CLI - scripts, shells, CI/CD, or an agent running the binary as a subprocess. Covers install, TWELVEDATA_API_KEY auth, machine mode, exit codes, twelvedata commands discovery, and ti subcommands for indicators. Use it whenever the user mentions the Twelve Data CLI, the twelvedata binary, or wants market data without writing HTTP/SDK code.
+description: Use when querying Twelve Data from the terminal via the twelvedata CLI - scripts, shells, CI/CD, or an agent running the binary as a subprocess. Covers install, auth through the TWELVEDATA_API_KEY env var the binary reads, machine mode, exit codes, twelvedata commands discovery, and ti subcommands for indicators. Use it whenever the user mentions the Twelve Data CLI, the twelvedata binary, or wants market data without writing HTTP/SDK code.
 ---
 
 # Twelve Data CLI
@@ -9,7 +9,7 @@ Binary name is `twelvedata`. Source: https://github.com/twelvedata/twelvedata-cl
 
 ## How to answer
 
-Always show the exact `twelvedata …` invocation. Prefer the env var for the key. Discover flags with `twelvedata commands`, not by scraping `--help`. Indicators live under `twelvedata ti <name>`, not as top-level commands.
+Always show the exact `twelvedata …` invocation. Authenticate through the environment, never with `--api-key` in a command an agent or CI runs. Discover flags with `twelvedata commands`, not by scraping `--help`. Indicators live under `twelvedata ti <name>`, not as top-level commands.
 
 ## Install
 
@@ -23,12 +23,14 @@ Also: `brew install twelvedata/cli/twelvedata`, or `go install github.com/twelve
 
 Key resolution order: `--api-key` → `TWELVEDATA_API_KEY` → active profile from `twelvedata login` / `whoami`.
 
-This env name is **`TWELVEDATA_API_KEY`** (no underscores between Twelve and Data). The MCP/REST skills use `TWELVE_DATA_API_KEY`. They are different names. For CLI scripts export `TWELVEDATA_API_KEY`. Do not put the key on the command line in shared logs; use the env var or `twelvedata login --key-stdin`.
+The binary reads **`TWELVEDATA_API_KEY`** (no underscore between Twelve and Data), while the other skills here use `TWELVE_DATA_API_KEY`. Keep one key and map it for the CLI:
 
 ```bash
-export TWELVEDATA_API_KEY=...
+export TWELVEDATA_API_KEY="$TWELVE_DATA_API_KEY"
 twelvedata price --symbol AAPL
 ```
+
+Do not pass `--api-key` in scripts, CI or agent subprocesses: the key lands in shell history, `ps` output and CI logs. Interactively, `printf '%s' "$TWELVE_DATA_API_KEY" | twelvedata login --key-stdin` stores it instead.
 
 ## Machine mode (agents and CI)
 
@@ -67,4 +69,4 @@ twelvedata doctor --raw
 
 ## Reference
 
-Full command list and flags: run `twelvedata commands`. Upstream skill and docs live in https://github.com/twelvedata/twelvedata-cli.
+Full command list and flags: run `twelvedata commands`. Upstream docs: https://github.com/twelvedata/twelvedata-cli.
