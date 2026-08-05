@@ -6,12 +6,13 @@ Working plan for the first version.
 
 Done, no commit of its own.
 
-Inventory of [twelvedata.com/docs](https://twelvedata.com/docs) and the machine-readable [llms.txt](https://twelvedata.com/docs/llms.txt), the [Agent Skills](https://agentskills.io) format, and how existing skill repositories are built. The suggested set was discussed, and the research points at starting with six skills:
+Inventory of [twelvedata.com/docs](https://twelvedata.com/docs) and the machine-readable [llms.txt](https://twelvedata.com/docs/llms.txt), the [Agent Skills](https://agentskills.io) format, and how existing skill repositories are built. The suggested set was discussed, and the research points at starting with these skills:
 
 - `twelvedata-api`
 - `twelvedata-indicators`
 - `twelvedata-websocket`
 - `twelvedata-mcp`
+- `twelvedata-cli`
 - `twelvedata-funds`
 - `twelvedata-best-practices`
 
@@ -29,7 +30,7 @@ Done when the sync is repeatable, produces no diff on a second run, and the inde
 
 ## 4. Evals
 
-Two or three cases per skill in `skill-evals/<skill>/evals.json`, run with and without the skill and graded against assertions.
+Two or three cases per skill in `skills/<skill>/evals/evals.json`, run with and without the skill and graded against assertions.
 
 Done when every skill beats its no-skill baseline. A skill that does not gets reworked or dropped.
 
