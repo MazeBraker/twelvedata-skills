@@ -1,0 +1,40 @@
+{
+  "skill_name": "twelvedata-best-practices",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Our dashboard refreshes 40 tickers from Twelve Data every time someone opens it and we keep hitting rate limits. How should we restructure it?",
+      "expected_output": "Recommends batching, caching static data, sizing outputsize to what is displayed and watching /api_usage.",
+      "files": [],
+      "assertions": [
+        "Recommends POST /batch instead of a per-symbol loop",
+        "Recommends caching data that does not change intraday",
+        "Mentions checking /api_usage against the plan limit",
+        "Does not simply suggest upgrading the plan as the only fix"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I am correlating a US stock with a European one from Twelve Data and the numbers look off even though both series have the same length.",
+      "expected_output": "Identifies mismatched trading calendars and timezones, and requires joining on the datetime index instead of by position.",
+      "files": [],
+      "assertions": [
+        "Explains that equal length does not mean the same dates",
+        "Recommends joining on the datetime index",
+        "Mentions passing an explicit timezone",
+        "Addresses how missing rows are handled"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Some fields in the Twelve Data response come back as null. Should I default them to zero so the chart renders?",
+      "expected_output": "Says no, null means unavailable and substituting zero creates a fake price move; the gap should be surfaced instead.",
+      "files": [],
+      "assertions": [
+        "Advises against replacing null with zero",
+        "Explains that null means the metric is unavailable rather than an error",
+        "Suggests surfacing the gap in the output"
+      ]
+    }
+  ]
+}

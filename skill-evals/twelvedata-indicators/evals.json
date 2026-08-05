@@ -1,0 +1,38 @@
+{
+  "skill_name": "twelvedata-indicators",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Show me the 14 day RSI for AAPL over the last month using Twelve Data.",
+      "expected_output": "A call to the /rsi endpoint with time_period=14 and interval=1day, not a manual RSI computation from candles.",
+      "files": [],
+      "assertions": [
+        "Calls the /rsi endpoint",
+        "Passes time_period=14 and interval=1day",
+        "Does not fetch raw candles and compute RSI in code"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I need MACD for BTC/USD but I also want to control which moving average types are used.",
+      "expected_output": "Routes to /macdext rather than /macd, because the moving average types are configurable there.",
+      "files": [],
+      "assertions": [
+        "Chooses /macdext over /macd",
+        "Explains that /macd uses fixed moving average types",
+        "Does not present /macd_slope as an equivalent option"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Compute a 200 period simple moving average for MSFT and plot it against price. I only need the last 30 points shown.",
+      "expected_output": "Recognizes that a 200 period lookback needs more history than 30 points and raises outputsize or sets a date range.",
+      "files": [],
+      "assertions": [
+        "Requests more history than the 30 points to be displayed",
+        "Uses the /sma endpoint",
+        "Mentions that early values are unavailable without enough warm-up data"
+      ]
+    }
+  ]
+}
