@@ -20,7 +20,7 @@ Skills are scoped so that a task loads only the context it needs. `twelvedata-ap
 
 ## Prerequisites
 
-1. Access to this GitLab project (it is private until published). Ask a maintainer for Reporter access or for a zip of the repo.
+1. A clone of this repository (private GitLab for now; a public GitHub mirror may come later — see [ROADMAP.md](./ROADMAP.md)).
 2. Node.js 18+ (for `npx skills`).
 3. An agent client that loads Agent Skills (Cursor, Claude Code, Codex, or compatible).
 4. A Twelve Data API key from [twelvedata.com/register](https://twelvedata.com/register).
@@ -46,8 +46,6 @@ If the latest work is still on a feature branch (for example `skills-v1`):
 git fetch origin
 git checkout skills-v1
 ```
-
-Or unpack a zip from a maintainer and `cd` into that folder.
 
 ### 2. See what is available (no install yet)
 
