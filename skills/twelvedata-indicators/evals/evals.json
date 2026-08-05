@@ -25,7 +25,7 @@
     },
     {
       "id": 3,
-      "prompt": "Compute a 200 period simple moving average for MSFT and plot it against price. I only need the last 30 points shown.",
+      "prompt": "Compute a 200 period simple moving average for MSFT and plot it against price. I only need the last 30 points shown. Show the exact Twelve Data request.",
       "expected_output": "Recognizes that a 200 period lookback needs more history than 30 points and raises outputsize or sets a date range.",
       "files": [],
       "assertions": [

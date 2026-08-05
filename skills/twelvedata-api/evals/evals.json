@@ -15,7 +15,7 @@
     },
     {
       "id": 2,
-      "prompt": "Pull the current price for Tesla, Royal Bank of Canada and the euro against the dollar using Twelve Data.",
+      "prompt": "Pull the current price for Tesla, Royal Bank of Canada and the euro against the dollar using Twelve Data. Show the exact requests you would send; do not only describe the plan.",
       "expected_output": "Resolves the ambiguous Royal Bank listing via /symbol_search or an exchange qualifier, and batches the requests instead of looping.",
       "files": [],
       "assertions": [

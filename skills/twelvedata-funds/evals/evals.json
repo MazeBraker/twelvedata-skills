@@ -3,7 +3,7 @@
   "evals": [
     {
       "id": 1,
-      "prompt": "What does the QQQ ETF actually hold? Give me the top positions from Twelve Data.",
+      "prompt": "What does the QQQ ETF actually hold? Give me the top positions from Twelve Data. Show the exact Twelve Data endpoints you would call.",
       "expected_output": "Resolves the fund through /etfs/list and then calls /etfs/world/composition rather than the full document.",
       "files": [],
       "assertions": [
@@ -14,7 +14,7 @@
     },
     {
       "id": 2,
-      "prompt": "Compare the risk profile and ratings of two Vanguard mutual funds using Twelve Data.",
+      "prompt": "Compare the risk profile and ratings of two Vanguard mutual funds using Twelve Data. Show the exact endpoints, including how you resolve the family if tickers are unknown.",
       "expected_output": "Uses /mutual_funds/world/risk and /mutual_funds/world/ratings, resolving the funds via the directory or the family endpoint first.",
       "files": [],
       "assertions": [
