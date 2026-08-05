@@ -36,8 +36,8 @@ Disambiguate a ticker by appending the exchange after a colon, as in `RY:TSX`.
 
 ## Hard limits
 
-- **Three connections per API key across the lifetime of the application.** Opening a fourth silently closes the oldest one. Use one connection per environment, typically production, stage and local, and never open a connection per user or per page.
-- The server accepts up to 100 events from the client. This does not limit messages sent back to you.
+- **Three connections per API key across the lifetime of the application.** Opening a fourth silently closes the oldest one. A new deploy that opens another socket is the usual reason live ticks stop in production. Use one connection per environment, typically production, stage and local, and never open a connection per user or per page.
+- The server accepts up to 100 events from the client (subscribe/unsubscribe/heartbeat). This is not a REST API rate limit and is not fixed by upgrading credits on `/time_series`.
 - No limit on the number of symbols, but a single message cannot exceed 1 MB.
 - Streaming costs WebSocket credits, 1 per symbol. These are separate from API credits.
 
@@ -47,12 +47,12 @@ Full WebSocket access requires the Pro plan for individuals or Venture for busin
 
 ## Gotchas
 
-- Subscribe after the socket is open, not before. Events sent during connect are lost.
+- Subscribe after the socket is open, not before. Events sent during connect are lost. Always show that order in sample code.
 - Always read `status` events. A symbol that failed validation simply never produces ticks, with no error thrown.
-- Missing heartbeats are the usual cause of a connection that dies after a few minutes with no error.
+- Missing heartbeats (about every 10 seconds) are the usual cause of a connection that dies after a few minutes with no error. Do not blame REST `429` for that.
 - Reconnect with backoff and resubscribe from your own list. The server does not restore subscriptions.
-- `timestamp` is UNIX seconds in UTC. Convert before displaying, see the `twelvedata-best-practices` skill.
-- Streaming does not backfill. Load history from `/time_series` and then attach the stream, otherwise the chart starts empty.
+- `timestamp` is UNIX seconds in UTC. Convert before displaying.
+- Streaming does not backfill. Load history from `/time_series` and then attach the stream, otherwise the chart starts empty. Waiting longer or adding more symbols does not fill history.
 
 ## Reference
 

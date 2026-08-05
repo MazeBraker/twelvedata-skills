@@ -1,41 +1,48 @@
 ---
 name: twelvedata-best-practices
-description: Use when building something on Twelve Data rather than making a single call - budgeting API credits, deciding which errors are worth retrying, caching, choosing interval and outputsize, working with timezones and exchange sessions, aligning several instruments onto one timeline, and dealing with gaps, nulls, splits and holidays. Use it whenever a task involves repeated requests, a dashboard, a backtest, a scheduled job, or comparing instruments, and whenever data looks wrong rather than missing.
+description: Use when building something on Twelve Data rather than making a single call - budgeting API credits with /api_usage, deciding which errors are worth retrying, caching, choosing interval and outputsize, working with Twelve Data timezone parameters, aligning several instruments onto one timeline, and dealing with gaps, nulls, splits and holidays. Use it whenever a task involves repeated requests, a dashboard, a backtest, a scheduled job, or comparing instruments, and whenever data looks wrong rather than missing.
 ---
 
 # Twelve Data best practices
 
-Rules that apply across endpoints. For endpoint specifics see the `twelvedata-api` skill.
+Rules that apply across endpoints. For endpoint specifics see the `twelvedata-api` skill. Always name the Twelve Data fields and parameters below in the answer; generic advice without them is not enough.
 
-## Budget credits before writing the loop
+## Budget credits with `/api_usage`
 
-Credits are consumed per symbol per request, and plans limit credits per minute and sometimes per day. A naive loop over a watchlist exhausts the quota within seconds of a page load.
+Credits are consumed per symbol per request. Plans limit credits per minute and sometimes per day.
 
-1. Batch several requests into one `POST /batch` call.
-2. Ask for what you will display. `outputsize` defaults to 30 but people often set 5000 out of habit.
-3. Cache anything that does not change intraday: instrument metadata, exchange schedules, fundamentals, fund composition.
-4. Read `/api_usage` in scheduled jobs and stop before hitting the ceiling instead of after.
+1. Prefer `POST /batch` over a per-symbol loop.
+2. Set `outputsize` to what you will display. Default is `30`; do not habitually request `5000`.
+3. Cache data that does not change intraday: instrument metadata, exchange schedules, fundamentals, fund composition.
+4. In scheduled jobs call `/api_usage` and stop when `current_usage` approaches `plan_limit` (and check `daily_usage` vs `plan_daily_limit` when present). Do not wait for a `429` to discover the ceiling.
 
-## Retry only 429 and 500
+```bash
+curl -H "Authorization: apikey $TWELVE_DATA_API_KEY" \
+  "https://api.twelvedata.com/api_usage"
+```
 
-`400`, `401`, `403` and `404` describe a wrong request, a wrong key, a plan restriction and an empty result. None of them change with a retry, and every attempt costs quota. Treating `403` as a rate limit is the most expensive mistake on this API.
+## Retry only `429` and `500`
 
-## Timezones
+On Twelve Data, `403` means the endpoint or data is not in the plan. `429` means the rate limit. Retrying a `403` burns credits and never succeeds. `400`, `401` and `404` also do not improve with retries.
 
-Datetimes come back in the exchange timezone unless you pass `timezone`, whose value is a case-sensitive IANA name such as `America/New_York`, or `UTC`. Pass it explicitly on every request that will be compared with another one.
+## Timezone parameter
+
+Datetimes come back in the exchange timezone unless you pass `timezone`. The value must be a case-sensitive IANA name such as `America/New_York` or `UTC`. Abbreviations like `EST` or `ET` are invalid for this parameter. Pass the same explicit `timezone` on every series you will compare.
+
+Whenever the user compares or correlates two instruments, always state both of these in the same answer: (1) equal series length does not mean the same calendar dates, and (2) join on the datetime index, never by row position. Timezone mistakes and positional zips are separate bugs; fix both.
 
 ## Aligning several instruments
 
-Exchanges have different holidays and sessions, so two series of the same length rarely cover the same dates. Request both with the same `interval` and an explicit date range, join on the datetime index rather than by position, and say whether missing rows were dropped or filled. Correlations computed on positionally zipped series are a common silent bug.
+Equal-length series are not the same dates: exchanges have different holidays. Request the same `interval` and an explicit date range, join on the datetime index (not by row position), and say whether gaps were dropped or filled. Say this explicitly even when the main complaint looks like a timezone bug.
 
 ## Missing data
 
-`null` means the metric is unavailable for that row, not that the request failed, and a missing bar usually means no trading rather than an outage. Substituting zero turns into a fake price move on the chart, so surface the gap instead.
+`null` means the metric is unavailable for that row, not that the request failed. Substituting zero creates a fake price move. Surface the gap instead.
 
 ## Corporate actions
 
-A raw price series has discontinuities at splits. For returns over a long window, adjust using `/splits` and `/dividends` or state that the series is unadjusted.
+A raw price series has discontinuities at splits. For long-window returns, adjust with `/splits` and `/dividends` or state that the series is unadjusted.
 
 ## Reporting the result
 
-State the interval, the timezone and the as-of timestamp, and say when a plan limit truncated the data instead of presenting a partial answer as complete.
+State the interval, the timezone and the as-of timestamp. If a plan limit or batch quota truncated the payload, say so instead of presenting a partial answer as complete.

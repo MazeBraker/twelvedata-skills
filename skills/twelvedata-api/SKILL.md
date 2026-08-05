@@ -9,6 +9,10 @@ Base URL is `https://api.twelvedata.com`. Every endpoint returns JSON unless `fo
 
 If the Twelve Data MCP server is available, call it instead of building HTTP requests by hand. See the `twelvedata-mcp` skill for setup.
 
+## How to answer
+
+Always include the concrete request in the reply: full URL path, method, and parameters (curl or SDK). Do not stop at "I will look it up" or "proceeding". For several symbols, show `/symbol_search` when names are ambiguous, then `POST /batch` (or say why separate calls are better). Read the API key from `TWELVE_DATA_API_KEY`, never hardcode it.
+
 ## Authentication
 
 Prefer the header, it keeps the key out of URLs and logs:
@@ -58,13 +62,13 @@ The body is always `{"code": ..., "message": ..., "status": "error"}`.
 |---|---|---|
 | 400 | Invalid parameter | Read `message`, it names the parameter and lists valid values |
 | 401 | Bad API key | Check the key, not the plan |
-| 403 | Endpoint or data not in the plan | Upgrade, retrying will not help |
+| 403 | Endpoint or data not in the plan | Upgrade; retrying will not help |
 | 404 | No data for these filters | Loosen the filters, often too narrow a date range |
 | 414 | Parameter array too long | Split the request |
-| 429 | Rate limit hit | Back off and retry, see `twelvedata-best-practices` |
+| 429 | Rate limit hit | Back off and retry |
 | 500 | Server side | Retry later |
 
-`403` and `429` are different problems. Retrying a `403` in a loop burns credits and never succeeds.
+`403` is a plan restriction. `429` is a rate limit. They are different: retry only `429` and `500`. A retry loop on `403` burns credits and never succeeds. When diagnosing a `403`, say explicitly that it is not a `429`.
 
 ## Batch requests
 
@@ -75,8 +79,9 @@ curl -X POST "https://api.twelvedata.com/batch" \
   -H "Content-Type: application/json" \
   -H "Authorization: apikey $TWELVE_DATA_API_KEY" \
   -d '{
-    "aapl": {"url": "/time_series?symbol=AAPL&interval=1min&outputsize=2"},
-    "fx":   {"url": "/exchange_rate?symbol=USD/JPY"}
+    "tsla": {"url": "/price?symbol=TSLA"},
+    "ry":   {"url": "/price?symbol=RY&exchange=TSX"},
+    "fx":   {"url": "/exchange_rate?symbol=EUR/USD"}
   }'
 ```
 
@@ -96,4 +101,4 @@ If the batch exceeds the remaining quota, only part of the data comes back. Chec
 
 `references/endpoints.md` lists every endpoint of the REST API, grouped by section, with a link to the page documenting its parameters and response. Read it when you need an endpoint you do not know by name, or before guessing a parameter. Market data, reference data, currencies, fundamentals, analyst estimates and regulatory filings are all in there.
 
-Switch skills when the task moves on: `twelvedata-indicators` for technical indicators, `twelvedata-funds` for ETFs and mutual funds, `twelvedata-websocket` for streaming, `twelvedata-best-practices` for credit budgeting, timezones and retries.
+Switch skills when the task moves on: `twelvedata-indicators` for technical indicators, `twelvedata-funds` for ETFs and mutual funds, `twelvedata-websocket` for streaming, `twelvedata-cli` for the terminal binary, `twelvedata-best-practices` for credit budgeting, timezones and retries.

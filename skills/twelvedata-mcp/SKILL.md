@@ -43,7 +43,7 @@ Claude Code and other MCP clients take the same command and arguments in their o
 
 Use MCP tools when the client supports MCP. The schemas keep parameter names correct and avoid a round trip through the docs.
 
-Use an official SDK when writing application code that has to run without an agent: `twelvedata` for Python, `@twelvedata/twelvedata-node` for Node, plus Go, Java, R and a CLI.
+Use an official SDK when writing application code that has to run without an agent: `twelvedata` for Python, `@twelvedata/twelvedata-node` for Node, plus Go, Java and R. Use the `twelvedata` CLI (see `twelvedata-cli`) from shells, scripts and CI.
 
 Use raw REST when neither is available, or for a one-off `curl`. Follow the rules in the `twelvedata-api` skill.
 
