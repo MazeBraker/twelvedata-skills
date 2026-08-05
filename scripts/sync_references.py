@@ -33,6 +33,21 @@ SECTION_OWNERS = {
     "money-market-funds.md": "twelvedata-funds",
 }
 
+# Sections that deliberately have no index: the skills link their pages directly.
+IGNORED_SECTIONS = frozenset(
+    {
+        "introduction.md",
+        "websocket/ws-overview.md",
+        "websocket/ws-real-time-price.md",
+        "ai/integrations.md",
+        "ai/integrations/chatgpt.md",
+        "ai/integrations/near-agent.md",
+        "ai/integrations/openclaw.md",
+        "ai/mcp-server.md",
+        "ai/world-model-dataset.md",
+    }
+)
+
 ENTRY_PATTERN = re.compile(
     r"\[([^\]]+)\]\(" + re.escape(DOCS_PREFIX) + r"([^)\s]+\.md)\):\s*(.+)"
 )
@@ -61,36 +76,49 @@ def render_section(index: str) -> tuple[str, list[str]]:
     return title, lines
 
 
-def main() -> int:
+def main(argv: list[str]) -> int:
+    check = "--check" in argv
+
     catalog = fetch(LLMS_TXT_URL)
     sections = dict.fromkeys(
         re.findall(re.escape(DOCS_PREFIX) + r"([^)\s]+\.md)", catalog)
     )
 
-    unknown = sorted(set(sections) - set(SECTION_OWNERS))
+    unknown = sorted(set(sections) - set(SECTION_OWNERS) - IGNORED_SECTIONS)
     if unknown:
-        print("Sections not covered by an index:", ", ".join(unknown))
+        print("New sections in llms.txt, own or ignore them:", ", ".join(unknown))
+        return 1
 
+    # Nothing is written until every section parses, so a failure below leaves
+    # the existing indexes intact.
     per_skill = defaultdict(list)
     for section in sections:
         skill = SECTION_OWNERS.get(section)
         if skill is None:
             continue
         title, lines = render_section(fetch(DOCS_PREFIX + section))
+        if not lines:
+            print(f"no endpoints parsed from {section}, upstream format changed")
+            return 1
         per_skill[skill].append(f"## {title}\n\n" + "\n".join(lines) + "\n")
 
+    stale = False
     for skill, blocks in per_skill.items():
         path = SKILLS_DIR / skill / "references" / "endpoints.md"
         content = HEADER + "\n" + "\n".join(blocks)
-        path.parent.mkdir(parents=True, exist_ok=True)
         if path.exists() and path.read_text(encoding="utf-8") == content:
             print(f"unchanged {skill}")
             continue
+        if check:
+            print(f"stale {path.relative_to(SKILLS_DIR.parent)}")
+            stale = True
+            continue
+        path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(content, encoding="utf-8")
         print(f"updated {path.relative_to(SKILLS_DIR.parent)}")
 
-    return 0
+    return 1 if stale else 0
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(main(sys.argv[1:]))
