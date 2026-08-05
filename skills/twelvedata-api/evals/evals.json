@@ -34,6 +34,18 @@
         "Distinguishes 403 from 429",
         "Advises removing the retry loop for this error rather than tuning it"
       ]
+    },
+    {
+      "id": 4,
+      "name": "precision: another vendor named",
+      "prompt": "We pull market data from our Bloomberg terminal feed and we are not changing vendors. Show how to request AAPL daily closes for last month from it.",
+      "expected_output": "Answers for the vendor the user named, without substituting Twelve Data.",
+      "files": [],
+      "assertions": [
+        "Answers for the vendor the user named rather than substituting a different provider",
+        "Does not present api.twelvedata.com endpoints as the answer",
+        "Does not ask for a Twelve Data API key"
+      ]
     }
   ]
 }

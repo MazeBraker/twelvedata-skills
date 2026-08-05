@@ -30,9 +30,9 @@ Done when the sync is repeatable, produces no diff on a second run, and the inde
 
 ## 4. Evals
 
-Two or three cases per skill in `skills/<skill>/evals/evals.json`, run with and without the skill and graded against assertions.
+Two to five cases per skill in `skills/<skill>/evals/evals.json`, run with and without the skill and graded against assertions. Settings are pinned in `agent-skills-eval.yaml` so a run can be repeated. Besides the cases that measure lift, a skill that risks taking over neighbouring tasks gets a precision case where it must stay out of the way.
 
-Done when every skill beats its no-skill baseline. A skill that does not gets reworked or dropped.
+Done when every skill beats its no-skill baseline on cases it was not tuned against. A skill that does not gets reworked or dropped.
 
 ## 5. Distribution
 
@@ -48,7 +48,6 @@ What has to be in place before it can be opened:
 
 - Sign-off from the owner on publishing the content, and agreement with the owner of [twelvedata-clawhub](https://github.com/twelvedata/twelvedata-clawhub) so there are not two diverging official skill sets.
 - A public GitHub mirror with publish access to the `twelvedata` organisation, because `npx skills update` has historically been GitHub-only and skills.sh discovery needs a public repository.
-- A license file, and `license` in each `SKILL.md` frontmatter if the skills carry it.
 - `metadata` in the frontmatter with author, version and repository, once those URLs actually exist.
 - README rewritten around `npx skills add twelvedata/skills` instead of the local clone.
 - A smoke test on a clean machine: install from the public URL into an empty project and confirm the skills activate.

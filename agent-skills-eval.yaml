@@ -1,0 +1,21 @@
+# Pinned so the numbers in eval.md can be reproduced.
+# Run: set -a; . ./.env; set +a; npx agent-skills-eval@0.1.1 --config agent-skills-eval.yaml
+root: ./skills
+workspace: ./skills-eval-workspace
+baseline: true
+target: gpt-4o-mini
+judge: gpt-4.1
+baseUrl: https://api.openai.com/v1
+apiKeyEnv: OPENAI_API_KEY
+concurrency: 4
+layout: iteration
+strict: true
+targetParams:
+  temperature: 0
+judgeParams:
+  temperature: 0
+report:
+  enabled: true
+  title: Twelve Data skills
+logging:
+  format: pretty

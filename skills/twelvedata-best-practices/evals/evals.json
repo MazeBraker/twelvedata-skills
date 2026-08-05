@@ -34,6 +34,30 @@
         "Explains that null means the metric is unavailable rather than an error",
         "Suggests surfacing the gap instead of inventing values"
       ]
+    },
+    {
+      "id": 4,
+      "name": "held-out: what to cache in a dashboard",
+      "prompt": "A Twelve Data dashboard refreshes 50 symbols every minute and we keep running out of credits. Of exchange schedules, company profiles, fundamentals and the 1min bars themselves, what should we cache, and what else would you change about the requests?",
+      "expected_output": "Caches the static reference data and not the intraday bars, batches the 50 symbols instead of looping, and sizes outputsize to what is displayed.",
+      "files": [],
+      "assertions": [
+        "Caches exchange schedules, profiles and fundamentals but not the 1min bars",
+        "Replaces the per-symbol loop with POST /batch",
+        "Sets outputsize to what is displayed instead of requesting the maximum"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "held-out: what to state in the report",
+      "prompt": "I am handing a Twelve Data price table to a colleague who will compare it against the exchange close. What has to be stated alongside the numbers so the comparison is not misleading?",
+      "expected_output": "States the interval, the explicit timezone and the as-of timestamp, and flags a payload truncated by plan or batch limits.",
+      "files": [],
+      "assertions": [
+        "Says to state the interval of the series",
+        "Says to state the timezone used and the as-of timestamp",
+        "Says to disclose when a plan limit or batch quota truncated the data instead of presenting it as complete"
+      ]
     }
   ]
 }

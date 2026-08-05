@@ -33,6 +33,18 @@
         "Uses the /sma endpoint",
         "Mentions that early values are unavailable without enough warm-up data"
       ]
+    },
+    {
+      "id": 4,
+      "name": "precision: local file, no Twelve Data account",
+      "prompt": "I have a CSV of OHLC candles exported from my broker and no Twelve Data account. Compute a 14 day RSI from that file in Python.",
+      "expected_output": "Computes RSI from the local CSV and does not redirect the user to a Twelve Data endpoint or an API key.",
+      "files": [],
+      "assertions": [
+        "Computes RSI from the local CSV data the user already has",
+        "Does not present the Twelve Data /rsi endpoint or any api.twelvedata.com URL as the answer",
+        "Does not ask the user for a Twelve Data API key"
+      ]
     }
   ]
 }
