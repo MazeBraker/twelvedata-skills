@@ -9,18 +9,20 @@ The official MCP server exposes the Twelve Data API as agent tools, so the model
 
 ## Run the server
 
+The package needs Python 3.13 (3.12 is too old, 3.14 currently fails to build deps). Pin it with `uvx`:
+
 ```bash
-uvx mcp-server-twelve-data --apikey $TWELVE_DATA_API_KEY
+uvx --python 3.13 mcp-server-twelve-data --twelve-data-apikey "$TWELVE_DATA_API_KEY"
 ```
 
 Or install it first:
 
 ```bash
-pip install mcp-server-twelve-data
-mcp-server-twelve-data --apikey $TWELVE_DATA_API_KEY
+python3.13 -m pip install mcp-server-twelve-data
+mcp-server-twelve-data --twelve-data-apikey "$TWELVE_DATA_API_KEY"
 ```
 
-Get a key at [twelvedata.com/register](https://twelvedata.com/register).
+The flag is `--twelve-data-apikey` (short `-k`). There is no `--apikey`. Get a key at [twelvedata.com/register](https://twelvedata.com/register).
 
 ## Configure a client
 
@@ -30,8 +32,15 @@ Cursor, in `~/.cursor/mcp.json` for every project or `.cursor/mcp.json` for one:
 {
   "mcpServers": {
     "twelvedata": {
+      "type": "stdio",
       "command": "uvx",
-      "args": ["mcp-server-twelve-data", "--apikey", "${TWELVE_DATA_API_KEY}"]
+      "args": [
+        "--python",
+        "3.13",
+        "mcp-server-twelve-data",
+        "--twelve-data-apikey",
+        "${env:TWELVE_DATA_API_KEY}"
+      ]
     }
   }
 }
@@ -50,7 +59,9 @@ Use raw REST when neither is available, or for a one-off `curl`. Follow the rule
 ## Gotchas
 
 - The key is passed as a command argument, so it can leak into process lists and shell history. Keep it in `TWELVE_DATA_API_KEY` and interpolate, never paste the literal key into a config file that gets committed.
+- The interpolation syntax is `${env:VAR}`. A bare `${VAR}` is not an environment variable in Cursor `mcp.json`, so the server starts with an unusable key. Inside a Cursor plugin `${VAR}` means a plugin variable that has to be declared in `variables` first.
 - `uvx` needs `uv` installed. If the client reports that the command was not found, that is the cause, not the API key.
+- Pin `--python 3.13`. Default `python3` on Homebrew may be 3.14, and `mcp-server-twelve-data` requires `>=3.13`.
 - MCP does not change plan limits. A tool call can still fail with `403` because the endpoint is not in the plan, or `429` because credits ran out.
 - Streaming still goes through WebSocket, see the `twelvedata-websocket` skill.
 - Twelve Data also ships integrations for ChatGPT, OpenClaw and NEAR AI. They are separate products, not alternatives to this server for IDE work.
