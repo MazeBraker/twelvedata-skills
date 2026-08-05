@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "twelvedata": {
+      "command": "uvx",
+      "args": ["mcp-server-twelve-data", "--apikey", "${TWELVE_DATA_API_KEY}"]
+    }
+  }
+}

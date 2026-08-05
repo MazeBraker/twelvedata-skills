@@ -1,0 +1,13 @@
+{
+  "name": "twelvedata",
+  "displayName": "Twelve Data",
+  "description": "Skills and MCP server for the Twelve Data financial market data API - quotes, time series, technical indicators, funds, and real-time streaming.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Twelve Data",
+    "url": "https://twelvedata.com"
+  },
+  "homepage": "https://twelvedata.com",
+  "repository": "https://gitlab.atlasgroup.ai/twelvedata/skills",
+  "keywords": ["finance", "market-data", "stocks", "forex", "crypto", "etf", "technical-analysis"]
+}

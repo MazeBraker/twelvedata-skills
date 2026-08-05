@@ -1,0 +1,13 @@
+{
+  "name": "twelvedata-skills",
+  "owner": {
+    "name": "Twelve Data",
+    "email": "info@twelvedata.com"
+  },
+  "plugins": [
+    {
+      "name": "twelvedata",
+      "source": "./"
+    }
+  ]
+}
