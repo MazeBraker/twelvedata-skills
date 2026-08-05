@@ -1,5 +1,4 @@
 {
-  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "twelvedata",
   "description": "Query the Twelve Data API for quotes, time series, technical indicators, funds, and real-time price streaming.",
   "version": "0.1.0",
@@ -10,5 +9,7 @@
   },
   "homepage": "https://twelvedata.com",
   "repository": "https://gitlab.atlasgroup.ai/twelvedata/skills",
+  "license": "MIT",
+  "mcpServers": "./mcp.json",
   "keywords": ["finance", "market-data", "stocks", "forex", "crypto", "etf", "technical-analysis"]
 }

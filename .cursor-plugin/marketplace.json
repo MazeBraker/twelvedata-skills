@@ -1,5 +1,9 @@
 {
   "name": "twelvedata-skills",
+  "description": "Twelve Data agent skills for market data, indicators, funds, WebSocket, MCP and CLI.",
+  "metadata": {
+    "description": "Twelve Data agent skills for market data, indicators, funds, WebSocket, MCP and CLI."
+  },
   "owner": {
     "name": "Twelve Data",
     "email": "info@twelvedata.com"
@@ -7,7 +11,8 @@
   "plugins": [
     {
       "name": "twelvedata",
-      "source": "./"
+      "source": "./",
+      "description": "Query the Twelve Data API for quotes, time series, technical indicators, funds, and real-time price streaming."
     }
   ]
 }

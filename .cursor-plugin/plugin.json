@@ -9,5 +9,6 @@
   },
   "homepage": "https://twelvedata.com",
   "repository": "https://gitlab.atlasgroup.ai/twelvedata/skills",
+  "license": "MIT",
   "keywords": ["finance", "market-data", "stocks", "forex", "crypto", "etf", "technical-analysis"]
 }
