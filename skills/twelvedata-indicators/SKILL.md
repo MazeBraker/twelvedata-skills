@@ -11,7 +11,7 @@ Read the `twelvedata-api` skill first for authentication, credits and error hand
 
 ## How to answer
 
-Always show the indicator endpoint call (curl or SDK). Never fetch candles and recompute RSI/MACD/SMA in pandas. When the user wants the last N plotted points of an indicator with `time_period=P`, request more history than N: set `outputsize` to at least `N + P` (or use `start_date`), otherwise early values are missing rather than wrong. When recommending `/macdext`, also say that `/macd` uses fixed moving average types and does not let you choose them.
+Always show the indicator endpoint call (curl or SDK). When the series comes from Twelve Data, never fetch candles and recompute RSI/MACD/SMA in pandas. When the user already has candles in a file or from another vendor, compute locally on that data instead: do not push them to Twelve Data or ask for an API key. When the user wants the last N plotted points of an indicator with `time_period=P`, request more history than N: set `outputsize` to at least `N + P` (or use `start_date`), otherwise early values are missing rather than wrong. When recommending `/macdext`, also say that `/macd` uses fixed moving average types and does not let you choose them.
 
 ## Call the endpoint, do not recompute
 

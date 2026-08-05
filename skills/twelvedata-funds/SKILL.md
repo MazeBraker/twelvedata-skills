@@ -29,7 +29,7 @@ Going straight to the data endpoint with a name the user typed usually returns `
 
 ## Endpoints
 
-ETFs: `/etfs/list` directory, `/etfs/world` full data, and the focused views `/etfs/world/summary`, `/etfs/world/performance`, `/etfs/world/risk`, `/etfs/world/composition`. Grouping lives in `/etfs/family` and `/etfs/type`. The asset catalog `/etfs` lists tradable ETF symbols.
+ETFs: `/etfs/list` directory, `/etfs/world` full data, and the focused views `/etfs/world/summary`, `/etfs/world/performance`, `/etfs/world/risk`, `/etfs/world/composition`. Grouping lives in `/etfs/family` and `/etfs/type`. The asset catalogs `/etfs` and `/funds` list tradable symbols, but they are reference data, so they are indexed in the `twelvedata-api` skill rather than here.
 
 Mutual funds: `/mutual_funds/list` directory, `/mutual_funds/world` full data, and the views `/mutual_funds/world/summary`, `/mutual_funds/world/performance`, `/mutual_funds/world/risk`, `/mutual_funds/world/ratings`, `/mutual_funds/world/composition`, `/mutual_funds/world/purchase_info`, `/mutual_funds/world/sustainability`. Grouping lives in `/mutual_funds/family` and `/mutual_funds/type`.
 
@@ -58,7 +58,7 @@ curl -H "Authorization: apikey $TWELVE_DATA_API_KEY" \
 
 - Fund families and types are separate lookup endpoints, not fields you can filter by on the directory. Resolve the family first if the user asks for "all Vanguard funds".
 - `/mutual_funds/world/ratings`, `/purchase_info` and `/sustainability` exist only for mutual funds. There is no ETF equivalent, so do not guess the URL.
-- Directory endpoints return `100` records by default. Raise `outputsize` before concluding that a fund does not exist.
+- Directory endpoints truncate by default: `/etfs/list` returns `50` records, `/mutual_funds/list` and `/money_market_funds/list` return `100`. Raise `outputsize` before concluding that a fund does not exist.
 - Money market funds are the newest family and expose fewer views than ETFs, only the directory and full data.
 - Funds report on their own schedule, so composition and holdings lag the market by weeks. Say so when presenting the data instead of implying it is live.
 - Price history for a fund still comes from `/time_series` in the `twelvedata-api` skill, these endpoints describe the fund rather than quote it.

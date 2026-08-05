@@ -56,4 +56,4 @@ Full WebSocket access requires the Pro plan for individuals or Venture for busin
 
 ## Reference
 
-The full event schema and the trial symbol rules are at https://twelvedata.com/docs/llms/websocket/ws-real-time-price.md. Fetch it if a subscription is rejected and the reason is not obvious.
+The full event schema is at https://twelvedata.com/docs/llms/websocket/ws-real-time-price.md. Connection limits, plan gating and the trial symbol list are at https://twelvedata.com/docs/llms/websocket/ws-overview.md. Fetch the second one if a subscription is rejected and the reason is not obvious.

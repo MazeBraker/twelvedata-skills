@@ -41,7 +41,7 @@ Equal-length series are not the same dates: exchanges have different holidays. R
 
 ## Corporate actions
 
-A raw price series has discontinuities at splits. For long-window returns, adjust with `/splits` and `/dividends` or state that the series is unadjusted.
+A raw price series has discontinuities at splits. For long-window returns, adjust with `/splits` and `/dividends` or state that the series is unadjusted. Both default to `range=last` and return a single event, so request `range=full` (or an explicit date range) covering the window, otherwise the adjustment silently misses older events.
 
 ## Reporting the result
 

@@ -13,6 +13,8 @@ If the Twelve Data MCP server is available, call it instead of building HTTP req
 
 Always include the concrete request in the reply: full URL path, method, and parameters (curl or SDK). Do not stop at "I will look it up" or "proceeding". For several symbols, show `/symbol_search` when names are ambiguous, then `POST /batch` (or say why separate calls are better). Read the API key from `TWELVE_DATA_API_KEY`, never hardcode it.
 
+This applies when the data is meant to come from Twelve Data. If the user names another vendor or already has the data at hand, answer for that source instead: do not substitute a Twelve Data endpoint and do not ask for an API key they did not need.
+
 ## Authentication
 
 Prefer the header, it keeps the key out of URLs and logs:
@@ -90,7 +92,8 @@ If the batch exceeds the remaining quota, only part of the data comes back. Chec
 ## Gotchas
 
 - `outputsize` defaults to `30` for time series and indicators, with a maximum of `5000`. Set it explicitly or the chart silently covers 30 points.
-- Financial statement endpoints default to `6` records, `/earnings` to `10`, `/dividends` and `/splits` to `100`. These are different defaults, do not assume one number.
+- Financial statement endpoints default to `6` records and `/earnings` to `10`. These are different defaults, do not assume one number.
+- `/dividends` and `/splits` have no `outputsize`. They take `range`, which defaults to `last`, so a plain request returns only the most recent event. Pass `range` (`1m` to `5y`, or `full`) or `start_date` / `end_date` for a history.
 - `null` in a response field means the metric is unavailable, not an error. Handle it instead of failing.
 - Statements have consolidated variants at `/income_statement/consolidated`, `/balance_sheet/consolidated` and `/cash_flow/consolidated`. Pick deliberately.
 - Historical data and calendars are separate endpoints. `/earnings` is what a company reported, `/earnings_calendar` is what is scheduled. Same split for `/dividends` and `/splits`.
