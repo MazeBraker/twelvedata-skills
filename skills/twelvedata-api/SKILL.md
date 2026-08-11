@@ -9,11 +9,28 @@ Base URL is `https://api.twelvedata.com`. Every endpoint returns JSON unless `fo
 
 If the Twelve Data MCP server is available, call it instead of building HTTP requests by hand. See the `twelvedata-mcp` skill for setup.
 
+## Activation
+
+Use when the data should come from Twelve Data: prices, quotes, time series, symbol search, exchanges, fundamentals, batch, or API usage.
+
+Do not use when:
+
+- The user named another vendor and is not switching (Bloomberg, broker export, etc.) — answer for that source.
+- The user already has the series locally (CSV, dataframe) and only wants a computation — do not push them to the API or ask for a key.
+- The task is fund holdings / ratings / family directories — switch to `twelvedata-funds`.
+- The task is a named technical indicator on Twelve Data symbols — switch to `twelvedata-indicators`.
+
 ## How to answer
 
 Always include the concrete request in the reply: full URL path, method, and parameters (curl or SDK). Do not stop at "I will look it up" or "proceeding". For several symbols, show `/symbol_search` when names are ambiguous, then `POST /batch` (or say why separate calls are better). Read the API key from `TWELVE_DATA_API_KEY`, never hardcode it.
 
 This applies when the data is meant to come from Twelve Data. If the user names another vendor or already has the data at hand, answer for that source instead: do not substitute a Twelve Data endpoint and do not ask for an API key they did not need.
+
+## Asset classes
+
+Stocks, forex, crypto, commodities and bonds share one pattern: resolve the symbol (catalog or `/symbol_search`), then call market-data or fundamentals endpoints. Funds as a *product* (holdings, NAV meta, ratings) use a different directory → view contract — that is `twelvedata-funds`, not this skill. An ETF *price chart* still uses `/time_series` here.
+
+Read `references/asset-classes.md` when choosing a catalog or deciding whether to stay on this skill or switch.
 
 ## Authentication
 
@@ -102,6 +119,8 @@ If the batch exceeds the remaining quota, only part of the data comes back. Chec
 
 ## Where to look next
 
+`references/asset-classes.md` — which catalog and skill to use per asset class (stocks, FX, crypto, bonds, commodities vs funds).
+
 `references/endpoints.md` lists every endpoint of the REST API, grouped by section, with a link to the page documenting its parameters and response. Read it when you need an endpoint you do not know by name, or before guessing a parameter. Market data, reference data, currencies, fundamentals, analyst estimates and regulatory filings are all in there.
 
-Switch skills when the task moves on: `twelvedata-indicators` for technical indicators, `twelvedata-funds` for ETFs and mutual funds, `twelvedata-websocket` for streaming, `twelvedata-cli` for the terminal binary, `twelvedata-best-practices` for credit budgeting, timezones and retries.
+Switch skills when the task moves on: `twelvedata-indicators` for technical indicators, `twelvedata-funds` for ETFs and mutual funds as products, `twelvedata-websocket` for streaming, `twelvedata-cli` for the terminal binary, `twelvedata-best-practices` for credit budgeting, timezones and retries.
