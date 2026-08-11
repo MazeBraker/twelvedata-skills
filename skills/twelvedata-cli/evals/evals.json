@@ -1,0 +1,39 @@
+{
+  "skill_name": "twelvedata-cli",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "From a CI shell I need the last 30 daily bars for AAPL via the Twelve Data CLI, as JSON I can pipe to jq. Show the exact commands including how to auth without interactive login.",
+      "expected_output": "Exports TWELVEDATA_API_KEY (the name the binary reads) and runs twelvedata time-series with --symbol AAPL --interval 1day --outputsize 30; no interactive login and no --api-key on the command line.",
+      "files": [],
+      "assertions": [
+        "Uses the twelvedata CLI binary (not raw curl to api.twelvedata.com as the primary path)",
+        "Authenticates through the TWELVEDATA_API_KEY environment variable rather than passing --api-key on the command line",
+        "Runs time-series with interval 1day and outputsize 30 (or equivalent flags)",
+        "Does not rely on interactive twelvedata login as the only auth method for CI"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Get the 14-day RSI for AAPL with the Twelve Data CLI. I tried `twelvedata rsi` and it failed.",
+      "expected_output": "Uses twelvedata ti rsi with --symbol AAPL --interval 1day --time-period 14 and explains indicators live under ti.",
+      "files": [],
+      "assertions": [
+        "Uses twelvedata ti rsi (or ti <indicator>), not a top-level rsi command",
+        "Passes time-period 14 and an interval such as 1day",
+        "Explains that indicators are under the ti subcommand"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Our agent subprocess calls the Twelve Data CLI and sometimes gets a non-zero exit. How should we discover valid flags, and where do errors go so stdout stays pipeable?",
+      "expected_output": "Points at twelvedata commands for discovery, errors on stderr as JSON, stdout response-only, and stable exit codes such as 3 for auth.",
+      "files": [],
+      "assertions": [
+        "Recommends twelvedata commands (or schema) instead of scraping --help as the source of truth",
+        "States that errors go to stderr (JSON envelope) while stdout stays the response",
+        "Mentions at least one stable exit code category such as auth=3 or rate limit=6"
+      ]
+    }
+  ]
+}

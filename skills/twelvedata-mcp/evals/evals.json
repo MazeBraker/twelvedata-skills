@@ -1,0 +1,27 @@
+{
+  "skill_name": "twelvedata-mcp",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Set up Twelve Data in Cursor so I can ask about market data directly in the editor.",
+      "expected_output": "Adds the twelvedata MCP server to the Cursor config with uvx and the key taken from an environment variable.",
+      "files": [],
+      "assertions": [
+        "Configures the MCP server rather than writing REST calls",
+        "Uses the API key from an environment variable instead of a literal value",
+        "Mentions restarting the client and verifying the server is connected"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I configured the Twelve Data MCP server but the client says the command was not found.",
+      "expected_output": "Identifies the missing uv installation as the cause rather than an authentication problem.",
+      "files": [],
+      "assertions": [
+        "Attributes the error to uv or uvx not being installed",
+        "Does not suggest that the API key is wrong",
+        "Offers the pip installation as an alternative"
+      ]
+    }
+  ]
+}

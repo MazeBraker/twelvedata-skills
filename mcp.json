@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "twelvedata": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "--python",
+        "3.13",
+        "mcp-server-twelve-data",
+        "--twelve-data-apikey",
+        "${env:TWELVE_DATA_API_KEY}"
+      ]
+    }
+  }
+}

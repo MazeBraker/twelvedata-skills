@@ -1,0 +1,51 @@
+{
+  "skill_name": "twelvedata-api",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Get me the last 6 months of daily prices for Apple from Twelve Data and save them to a CSV.",
+      "expected_output": "A call to /time_series with interval=1day and an explicit outputsize or date range, authenticated with the key from an environment variable.",
+      "files": [],
+      "assertions": [
+        "Uses the /time_series endpoint",
+        "Sets outputsize or a date range explicitly instead of relying on the default of 30",
+        "Reads the API key from an environment variable rather than hardcoding it",
+        "Does not invent parameters that are not part of the endpoint"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Pull the current price for Tesla, Royal Bank of Canada and the euro against the dollar using Twelve Data. Show the exact requests you would send; do not only describe the plan.",
+      "expected_output": "Resolves the ambiguous Royal Bank listing via /symbol_search or an exchange qualifier, and batches the requests instead of looping.",
+      "files": [],
+      "assertions": [
+        "Resolves the company name to a ticker with /symbol_search or passes exchange or mic_code",
+        "Uses POST /batch or explains why separate calls are acceptable",
+        "Does not assume a single ticker is unique across exchanges"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "My Twelve Data integration keeps returning 403 on the fundamentals endpoints. I added a retry loop but it still fails. What is wrong?",
+      "expected_output": "Explains that 403 is a plan restriction, not a rate limit, and that retrying cannot succeed and consumes credits.",
+      "files": [],
+      "assertions": [
+        "States that 403 means the endpoint or data is not included in the plan",
+        "Distinguishes 403 from 429",
+        "Advises removing the retry loop for this error rather than tuning it"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "precision: another vendor named",
+      "prompt": "We pull market data from our Bloomberg terminal feed and we are not changing vendors. Show how to request AAPL daily closes for last month from it.",
+      "expected_output": "Answers for the vendor the user named, without substituting Twelve Data.",
+      "files": [],
+      "assertions": [
+        "Answers for the vendor the user named rather than substituting a different provider",
+        "Does not present api.twelvedata.com endpoints as the answer",
+        "Does not ask for a Twelve Data API key"
+      ]
+    }
+  ]
+}

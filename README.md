@@ -1,93 +1,140 @@
-# skills
+# Twelve Data Skills
 
+Agent Skills for working with the [Twelve Data](https://twelvedata.com) financial market data API. Follows the [Agent Skills](https://agentskills.io) format, so the skills work in Cursor, Claude Code, Codex and other compatible clients.
 
+The repository is being built step by step, see [ROADMAP.md](./ROADMAP.md) for what is done and what comes next. Eval scores: [eval.md](./eval.md).
 
-## Getting started
+## Skills
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+| Skill | Description |
+| --- | --- |
+| [twelvedata-api](./skills/twelvedata-api) | Core REST API: authentication, credits, errors, batching, symbol resolution |
+| [twelvedata-indicators](./skills/twelvedata-indicators) | 100+ ready-made technical indicators |
+| [twelvedata-funds](./skills/twelvedata-funds) | ETFs, mutual funds and money market funds |
+| [twelvedata-websocket](./skills/twelvedata-websocket) | Real-time price streaming |
+| [twelvedata-mcp](./skills/twelvedata-mcp) | MCP server and SDK setup for agent clients |
+| [twelvedata-cli](./skills/twelvedata-cli) | Official `twelvedata` CLI for shells, scripts and CI |
+| [twelvedata-best-practices](./skills/twelvedata-best-practices) | Credit budgeting, timezones, gaps, retries, caching |
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+Skills are scoped so that a task loads only the context it needs. `twelvedata-api` holds the rules shared by every request and routes to the other skills.
 
-## Add your files
+## Prerequisites
 
-* [Create](https://docs.gitlab.com/user/project/repository/web_editor/#create-a-file) or [upload](https://docs.gitlab.com/user/project/repository/web_editor/#upload-a-file) files
-* [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+1. A clone of this repository (private GitLab for now; a public GitHub mirror may come later — see [ROADMAP.md](./ROADMAP.md)).
+2. Node.js 18+ (for `npx skills`).
+3. An agent client that loads Agent Skills (Cursor, Claude Code, Codex, or compatible).
+4. A Twelve Data API key from [twelvedata.com/register](https://twelvedata.com/register).
 
+```bash
+export TWELVE_DATA_API_KEY='your-key'
 ```
-cd existing_repo
-git remote add origin https://gitlab.atlasgroup.ai/twelvedata/skills.git
-git branch -M main
-git push -uf origin main
+
+All skills in this repo use that single name. The `twelvedata` CLI binary reads `TWELVEDATA_API_KEY`, so mirror it when you use the CLI: `export TWELVEDATA_API_KEY="$TWELVE_DATA_API_KEY"`.
+
+## Install
+
+### 1. Get the repository
+
+```bash
+git clone https://gitlab.atlasgroup.ai/twelvedata/skills.git
+cd skills
 ```
 
-## Integrate with your tools
+If the latest work is still on a feature branch (for example `skills-v1`):
 
-* [Set up project integrations](https://gitlab.atlasgroup.ai/twelvedata/skills/-/settings/integrations)
+```bash
+git fetch origin
+git checkout skills-v1
+```
 
-## Collaborate with your team
+### 2. See what is available (no install yet)
 
-* [Invite team members and collaborators](https://docs.gitlab.com/user/project/members/)
-* [Create a new merge request](https://docs.gitlab.com/user/project/merge_requests/creating_merge_requests/)
-* [Automatically close issues from merge requests](https://docs.gitlab.com/user/project/issues/managing_issues/#closing-issues-automatically)
-* [Enable merge request approvals](https://docs.gitlab.com/user/project/merge_requests/approvals/)
-* [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+From the **repository root**:
 
-## Test and Deploy
+```bash
+npx skills add . --list
+```
 
-Use the built-in continuous integration in GitLab.
+You should see seven skills (`twelvedata-api`, `twelvedata-indicators`, …).
 
-* [Get started with GitLab CI/CD](https://docs.gitlab.com/ci/quick_start/)
-* [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/user/application_security/sast/)
-* [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/topics/autodevops/requirements/)
-* [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/user/clusters/agent/)
-* [Set up protected environments](https://docs.gitlab.com/ci/environments/protected_environments/)
+### 3. Install one skill
 
-***
+Example — only the REST core skill, into Cursor for this project:
 
-# Editing this README
+```bash
+npx skills add . --skill twelvedata-api --agent cursor -y
+```
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+Other examples:
 
-## Suggestions for a good README
+```bash
+# CLI skill only
+npx skills add . --skill twelvedata-cli --agent cursor -y
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+# Several skills
+npx skills add . --skill twelvedata-api --skill twelvedata-indicators --agent cursor -y
+```
 
-## Name
-Choose a self-explaining name for your project.
+Replace `cursor` with your client if needed (`claude-code`, etc.), or omit `--agent` and pick interactively.
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+### 4. Install every skill
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+```bash
+npx skills add . --skill '*' --agent cursor -y
+```
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+### 5. Confirm installation
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+```bash
+npx skills list
+```
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+In Cursor, open a chat in the same project and ask something that should trigger the skill, for example:
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+- `twelvedata-api`: “Get the last 30 daily bars for AAPL from Twelve Data; show the exact request.”
+- `twelvedata-cli`: “Show the Twelve Data CLI command for 14-day RSI on AAPL.”
+- `twelvedata-mcp`: “How do I wire Twelve Data MCP into Cursor?”
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+The agent should follow the skill (env key, concrete endpoints/flags). If it ignores Twelve Data rules, check that `npx skills list` shows the skill for that project and restart the client.
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+### Optional: MCP server
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+`mcp.json` in this repo is a template. Merge it into `~/.cursor/mcp.json` (or the project `.cursor/mcp.json`), keep the key in `TWELVE_DATA_API_KEY`, restart Cursor, and confirm the `twelvedata` server is connected. Details: `twelvedata-mcp` skill. Cursor interpolates `${env:TWELVE_DATA_API_KEY}` — a bare `${VAR}` will not resolve.
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+### Optional: install as a plugin
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+Claude Code copies the marketplace source as-is and does not skip `.gitignore`, so never add this working copy as a marketplace while `.env` is present. Export a clean tree first:
+
+```bash
+./scripts/export_plugin.sh
+claude plugin marketplace add "$(pwd)/.plugin-export"
+claude plugin install twelvedata@twelvedata-skills
+claude plugin list   # twelvedata@twelvedata-skills, enabled
+```
+
+Cursor local plugin (after the same export):
+
+```bash
+mkdir -p ~/.cursor/plugins/local
+ln -sfn "$(pwd)/.plugin-export" ~/.cursor/plugins/local/twelvedata
+```
+
+Then reload the window and check Customize → Skills / MCP for the seven skills and the `twelvedata` server. Requires `uv` (`brew install uv`) so `uvx` in `mcp.json` resolves.
+
+### Remove a skill
+
+```bash
+npx skills remove twelvedata-api -y
+```
+
+## Links
+
+- [API documentation](https://twelvedata.com/docs)
+- [MCP server](https://github.com/twelvedata/mcp)
+- [CLI](https://github.com/twelvedata/twelvedata-cli)
+- [Python SDK](https://github.com/twelvedata/twelvedata-python)
+- [Pricing](https://twelvedata.com/pricing)
 
 ## License
-For open source projects, say how it is licensed.
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+MIT, see [LICENSE](./LICENSE).

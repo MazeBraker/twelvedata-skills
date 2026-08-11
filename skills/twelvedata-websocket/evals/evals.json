@@ -1,0 +1,39 @@
+{
+  "skill_name": "twelvedata-websocket",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Build a live price ticker for a handful of symbols using Twelve Data in Node.",
+      "expected_output": "Connects to wss://ws.twelvedata.com, subscribes after the socket opens, sends heartbeats and handles status events.",
+      "files": [],
+      "assertions": [
+        "Subscribes only after the connection is open",
+        "Sends periodic heartbeat events",
+        "Handles status events in addition to price events",
+        "Reuses a single connection instead of one per symbol"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Our Twelve Data websocket keeps dropping after a couple of minutes and sometimes stops sending data entirely when we deploy. Any idea why?",
+      "expected_output": "Points at missing heartbeats and at the three connection limit, where a new deployment silently closes the oldest connection.",
+      "files": [],
+      "assertions": [
+        "Mentions the heartbeat requirement",
+        "Mentions the limit of three connections per API key and that a new one closes the oldest",
+        "Does not attribute the problem to rate limits on the REST API"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "The chart is empty for the first few minutes after our Twelve Data stream connects. How do we fix it?",
+      "expected_output": "Explains that the stream does not backfill and that history must be loaded from /time_series before attaching the stream.",
+      "files": [],
+      "assertions": [
+        "States that the websocket does not deliver historical data",
+        "Recommends loading history from /time_series first",
+        "Does not suggest that more symbols or a longer wait solves it"
+      ]
+    }
+  ]
+}
