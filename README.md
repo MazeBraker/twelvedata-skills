@@ -23,7 +23,7 @@ Skills are scoped so that a task loads only the context it needs. `twelvedata-ap
 1. A clone of this repository (private GitLab for now; a public GitHub mirror may come later — see [ROADMAP.md](./ROADMAP.md)).
 2. Node.js 18+ (for `npx skills`).
 3. An agent client that loads Agent Skills (Cursor, Claude Code, Codex, or compatible).
-4. A Twelve Data API key from [twelvedata.com/register](https://twelvedata.com/register).
+4. For local API-key examples, a Twelve Data API key from [twelvedata.com/register](https://twelvedata.com/register). The hosted Cursor plugin uses browser login instead.
 
 ```bash
 export TWELVE_DATA_API_KEY='your-key'
@@ -99,7 +99,9 @@ The agent should follow the skill (env key, concrete endpoints/flags). If it ign
 
 ### Optional: MCP server
 
-`mcp.json` in this repo is a template. Merge it into `~/.cursor/mcp.json` (or the project `.cursor/mcp.json`), keep the key in `TWELVE_DATA_API_KEY`, restart Cursor, and confirm the `twelvedata` server is connected. Details: `twelvedata-mcp` skill. Cursor interpolates `${env:TWELVE_DATA_API_KEY}` — a bare `${VAR}` will not resolve.
+The root `mcp.json` is a template for local clients. Merge it into `~/.cursor/mcp.json` (or the project `.cursor/mcp.json`), keep the key in `TWELVE_DATA_API_KEY`, restart Cursor, and confirm the `twelvedata` server is connected. Details: `twelvedata-mcp` skill. Cursor interpolates `${env:TWELVE_DATA_API_KEY}` — a bare `${VAR}` will not resolve.
+
+The Cursor plugin instead uses `.cursor-plugin/mcp.json` to connect to our [hosted MCP server](https://mcp.twelvedata.com/mcp). Cursor should prompt for Twelve Data OAuth login in your browser; no API key or `uv` is needed for this path. For help, use [Twelve Data support](https://twelvedata.com/contact); see our [privacy policy](https://twelvedata.com/privacy).
 
 ### Optional: install as a plugin
 
@@ -116,10 +118,14 @@ Cursor local plugin (after the same export):
 
 ```bash
 mkdir -p ~/.cursor/plugins/local
-ln -sfn "$(pwd)/.plugin-export" ~/.cursor/plugins/local/twelvedata
+if [ -L ~/.cursor/plugins/local/twelvedata ]; then rm ~/.cursor/plugins/local/twelvedata; fi
+mkdir -p ~/.cursor/plugins/local/twelvedata
+cp -R .plugin-export/. ~/.cursor/plugins/local/twelvedata/
 ```
 
-Then reload the window and check Customize → Skills / MCP for the seven skills and the `twelvedata` server. Requires `uv` (`brew install uv`) so `uvx` in `mcp.json` resolves.
+Then reload the window and check Customize → Skills / MCP for the seven skills and the `twelvedata` server. If it is missing on a managed team account, ask an admin to enable local plugin imports. Sign in with a Twelve Data account and ask for an AAPL quote and 30 daily AAPL bars. Confirm that both tools return data. Disconnect the server, reconnect, and repeat the quote.
+
+For the public Cursor Marketplace, publish a clean, MIT-licensed mirror of this repository on GitHub, update the plugin manifest's `repository` link to that public URL, review the bundled Twelve Data logo for brand approval, and submit it at [cursor.com/marketplace/publish](https://cursor.com/marketplace/publish). Submission is pending a Twelve Data corporate Cursor publisher account, review of the [publisher terms](https://cursor.com/marketplace-publisher-terms), the public mirror, and Cursor's approval. Local testing does not create a public listing. The community [cursor.directory](https://cursor.directory/plugins/mcp-twelve-data-mcp-server) card is a separate listing and is not Marketplace status.
 
 ### Remove a skill
 
