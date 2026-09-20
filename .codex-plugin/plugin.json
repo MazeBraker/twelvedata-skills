@@ -1,0 +1,30 @@
+{
+  "name": "twelvedata",
+  "version": "0.1.0",
+  "description": "Use Twelve Data market data with Codex skills and MCP tools.",
+  "author": {
+    "name": "Twelve Data",
+    "email": "info@twelvedata.com",
+    "url": "https://twelvedata.com"
+  },
+  "homepage": "https://twelvedata.com",
+  "repository": "https://gitlab.atlasgroup.ai/twelvedata/skills",
+  "license": "MIT",
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Twelve Data",
+    "shortDescription": "Market data tools and guidance",
+    "longDescription": "Query prices, time series, indicators, funds and fundamentals with Twelve Data MCP tools and agent skills.",
+    "developerName": "Twelve Data",
+    "category": "Productivity",
+    "capabilities": ["Read"],
+    "websiteURL": "https://twelvedata.com",
+    "privacyPolicyURL": "https://twelvedata.com/privacy",
+    "defaultPrompt": [
+      "Use Twelve Data to get the latest AAPL quote.",
+      "Show five daily AAPL closes from Twelve Data.",
+      "Show AAPL RSI with Twelve Data."
+    ]
+  }
+}

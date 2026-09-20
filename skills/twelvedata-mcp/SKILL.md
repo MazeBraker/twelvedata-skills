@@ -26,6 +26,16 @@ The flag is `--twelve-data-apikey` (short `-k`). There is no `--apikey`. Get a k
 
 ## Configure a client
 
+Codex can use the hosted MCP server with per-user OAuth, without a local Python server or API key in configuration:
+
+```bash
+codex mcp add twelvedata --url https://mcp.twelvedata.com/mcp
+```
+
+The `add` command starts OAuth in the browser. Use `codex mcp login twelvedata` later to authorize again if needed, and `codex mcp remove twelvedata` to disconnect. After login, ask for an AAPL quote and AAPL RSI.
+
+For the seven skills and the hosted MCP connection together, install the Codex plugin from the clean local export as described in this repository's README.
+
 Cursor, in `~/.cursor/mcp.json` for every project or `.cursor/mcp.json` for one:
 
 ```json
