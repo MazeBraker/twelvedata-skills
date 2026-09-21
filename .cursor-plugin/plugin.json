@@ -5,10 +5,13 @@
   "version": "0.1.0",
   "author": {
     "name": "Twelve Data",
+    "email": "info@twelvedata.com",
     "url": "https://twelvedata.com"
   },
   "homepage": "https://twelvedata.com",
   "repository": "https://gitlab.atlasgroup.ai/twelvedata/skills",
+  "logo": "assets/twelvedata-logo.png",
   "license": "MIT",
+  "mcpServers": "./.cursor-plugin/mcp.json",
   "keywords": ["finance", "market-data", "stocks", "forex", "crypto", "etf", "technical-analysis"]
 }
