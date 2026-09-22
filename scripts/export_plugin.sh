@@ -31,6 +31,10 @@ required = [
     ".codex-plugin/plugin.json",
     ".mcp.json",
     ".agents/plugins/marketplace.json",
+    ".cursor-plugin/plugin.json",
+    ".cursor-plugin/mcp.json",
+    "assets/twelvedata-logo.png",
+    "LICENSE",
     "skills/twelvedata-api/SKILL.md",
     "skills/twelvedata-indicators/SKILL.md",
     "skills/twelvedata-funds/SKILL.md",
@@ -43,20 +47,32 @@ for rel in required:
     if not (out / rel).is_file():
         sys.exit(f"export missing {rel}")
 
+root_mcp = json.loads((out / "mcp.json").read_text())
+if "uvx" not in json.dumps(root_mcp):
+    sys.exit("root mcp.json must stay the local uvx template")
+
 plugin = json.loads((out / ".codex-plugin/plugin.json").read_text())
 mcp = json.loads((out / ".mcp.json").read_text())
 marketplace = json.loads((out / ".agents/plugins/marketplace.json").read_text())
-root_mcp = json.loads((out / "mcp.json").read_text())
 hosted = mcp["mcpServers"]["twelvedata"]["url"]
 if hosted != "https://mcp.twelvedata.com/mcp":
     sys.exit(f"hosted MCP url is {hosted}")
 if plugin.get("mcpServers") != "./.mcp.json":
     sys.exit("Codex plugin must point at ./.mcp.json")
-if "uvx" not in json.dumps(root_mcp):
-    sys.exit("root mcp.json must stay the local uvx template")
 if marketplace.get("name") != "twelvedata-skills":
     sys.exit("marketplace name must be twelvedata-skills")
 print("codex export ok")
+
+cursor_plugin = json.loads((out / ".cursor-plugin/plugin.json").read_text())
+cursor_hosted = json.loads((out / ".cursor-plugin/mcp.json").read_text())
+url = cursor_hosted["mcpServers"]["twelvedata"]["url"]
+if url != "https://mcp.twelvedata.com/mcp":
+    sys.exit(f"hosted MCP url is {url}")
+if cursor_plugin.get("mcpServers") != "./.cursor-plugin/mcp.json":
+    sys.exit("Cursor plugin must point at ./.cursor-plugin/mcp.json")
+if cursor_plugin.get("logo") != "assets/twelvedata-logo.png":
+    sys.exit("Cursor plugin logo path is missing")
+print("cursor export ok")
 PY
 
 echo "exported $OUT"
