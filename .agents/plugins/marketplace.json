@@ -1,0 +1,20 @@
+{
+  "name": "twelvedata-skills",
+  "interface": {
+    "displayName": "Twelve Data"
+  },
+  "plugins": [
+    {
+      "name": "twelvedata",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

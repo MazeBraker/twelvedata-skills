@@ -21,15 +21,17 @@ Skills are scoped so that a task loads only the context it needs. `twelvedata-ap
 ## Prerequisites
 
 1. A clone of this repository (private GitLab for now; a public GitHub mirror may come later — see [ROADMAP.md](./ROADMAP.md)).
-2. Node.js 18+ (for `npx skills`).
+2. Node.js 18+ if installing individual skills with `npx skills`.
 3. An agent client that loads Agent Skills (Cursor, Claude Code, Codex, or compatible).
-4. For local API-key examples, a Twelve Data API key from [twelvedata.com/register](https://twelvedata.com/register). The hosted Cursor plugin uses browser login instead.
+4. A Twelve Data account from [twelvedata.com/register](https://twelvedata.com/register). Local API key setups also need your API key. Hosted Cursor and Codex plugins use browser login instead.
+
+For local API and stdio MCP setups, set the key in your environment:
 
 ```bash
 export TWELVE_DATA_API_KEY='your-key'
 ```
 
-All skills in this repo use that single name. The `twelvedata` CLI binary reads `TWELVEDATA_API_KEY`, so mirror it when you use the CLI: `export TWELVEDATA_API_KEY="$TWELVE_DATA_API_KEY"`.
+All skills in this repo use that single name for local key-based access. The hosted Codex MCP server uses OAuth instead. The `twelvedata` CLI binary reads `TWELVEDATA_API_KEY`, so mirror it when you use the CLI: `export TWELVEDATA_API_KEY="$TWELVE_DATA_API_KEY"`.
 
 ## Install
 
@@ -102,6 +104,31 @@ The agent should follow the skill (env key, concrete endpoints/flags). If it ign
 The root `mcp.json` is a template for local clients. Merge it into `~/.cursor/mcp.json` (or the project `.cursor/mcp.json`), keep the key in `TWELVE_DATA_API_KEY`, restart Cursor, and confirm the `twelvedata` server is connected. Details: `twelvedata-mcp` skill. Cursor interpolates `${env:TWELVE_DATA_API_KEY}` — a bare `${VAR}` will not resolve.
 
 The Cursor plugin instead uses `.cursor-plugin/mcp.json` to connect to our [hosted MCP server](https://mcp.twelvedata.com/mcp). Cursor should prompt for Twelve Data OAuth login in your browser; no API key or `uv` is needed for this path. For help, use [Twelve Data support](https://twelvedata.com/contact); see our [privacy policy](https://twelvedata.com/privacy).
+
+### Codex: hosted MCP server
+
+For MCP tools without the bundled skills, connect Codex to the hosted Twelve Data server:
+
+```bash
+codex mcp add twelvedata --url https://mcp.twelvedata.com/mcp
+codex mcp list
+```
+
+The `add` command starts OAuth; sign in with your own Twelve Data account in the browser. Run `codex mcp login twelvedata` if you need to authorize again later. The hosted server uses per-user OAuth; you do not need to put an API key in Codex configuration. Codex desktop, CLI, and IDE extension share the same MCP configuration. In Codex, use `/mcp` to check that `twelvedata` is connected, then ask for an AAPL quote and AAPL RSI. To disconnect, run `codex mcp remove twelvedata`.
+
+### Codex: skills and hosted MCP as a plugin
+
+To install all seven skills and the hosted MCP connection together from this checkout, export a clean package and add it as a local Codex marketplace:
+
+```bash
+./scripts/export_plugin.sh
+codex plugin marketplace add "$(pwd)/.plugin-export"
+codex plugin add twelvedata@twelvedata-skills
+```
+
+Open Codex, authenticate the Twelve Data MCP server when prompted, and confirm the seven plugin skills and `twelvedata` MCP tools are available. Then ask for an AAPL quote and AAPL RSI. To remove the plugin or the MCP-only server: `codex plugin remove twelvedata@twelvedata-skills` and `codex mcp remove twelvedata`.
+
+This local marketplace is for testing and does not publish the plugin to the public ChatGPT/Codex directory. After a reviewed public GitHub mirror exists, install from that Git URL with `codex plugin marketplace add <github-url>` and `codex plugin add twelvedata@twelvedata-skills`. Do not treat a local plugin as a global catalog listing.
 
 ### Optional: install as a plugin
 
