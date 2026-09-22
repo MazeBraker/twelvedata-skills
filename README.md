@@ -128,7 +128,14 @@ codex plugin add twelvedata@twelvedata-skills
 
 Open Codex, authenticate the Twelve Data MCP server when prompted, and confirm the seven plugin skills and `twelvedata` MCP tools are available. Then ask for an AAPL quote and AAPL RSI. To remove the plugin or the MCP-only server: `codex plugin remove twelvedata@twelvedata-skills` and `codex mcp remove twelvedata`.
 
-This local marketplace is for testing and does not publish the plugin to the public ChatGPT/Codex directory. After a reviewed public GitHub mirror exists, install from that Git URL with `codex plugin marketplace add <github-url>` and `codex plugin add twelvedata@twelvedata-skills`. Do not treat a local plugin as a global catalog listing.
+This local marketplace is for testing and does not publish the plugin to the public ChatGPT/Codex directory. A temporary personal GitHub mirror (not a Twelve Data org listing) is at https://github.com/MazeBraker/twelvedata-skills. Install from that Git URL:
+
+```bash
+codex plugin marketplace add https://github.com/MazeBraker/twelvedata-skills
+codex plugin add twelvedata@twelvedata-skills
+```
+
+Do not treat a local plugin or this personal mirror as a global catalog listing. An official organization GitHub URL can replace the personal mirror later.
 
 ### Optional: install as a plugin
 

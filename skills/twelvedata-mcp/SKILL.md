@@ -34,7 +34,12 @@ codex mcp add twelvedata --url https://mcp.twelvedata.com/mcp
 
 The `add` command starts OAuth in the browser. Use `codex mcp login twelvedata` later to authorize again if needed, and `codex mcp remove twelvedata` to disconnect. After login, ask for an AAPL quote and AAPL RSI.
 
-For the seven skills and the hosted MCP connection together, install the Codex plugin from the clean local export as described in this repository's README.
+For the seven skills and the hosted MCP connection together, install the Codex plugin from the clean local export in this repository's README, or from the temporary personal GitHub mirror:
+
+```bash
+codex plugin marketplace add https://github.com/MazeBraker/twelvedata-skills
+codex plugin add twelvedata@twelvedata-skills
+```
 
 Cursor, in `~/.cursor/mcp.json` for every project or `.cursor/mcp.json` for one:
 

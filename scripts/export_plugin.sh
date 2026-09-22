@@ -59,6 +59,8 @@ if hosted != "https://mcp.twelvedata.com/mcp":
     sys.exit(f"hosted MCP url is {hosted}")
 if plugin.get("mcpServers") != "./.mcp.json":
     sys.exit("Codex plugin must point at ./.mcp.json")
+if plugin.get("repository") != "https://github.com/MazeBraker/twelvedata-skills":
+    sys.exit("Codex plugin repository must be the public GitHub mirror")
 if marketplace.get("name") != "twelvedata-skills":
     sys.exit("marketplace name must be twelvedata-skills")
 print("codex export ok")
