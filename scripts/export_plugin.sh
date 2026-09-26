@@ -73,6 +73,14 @@ if cursor_plugin.get("mcpServers") != "./.cursor-plugin/mcp.json":
 if cursor_plugin.get("logo") != "assets/twelvedata-logo.png":
     sys.exit("Cursor plugin logo path is missing")
 print("cursor export ok")
+
+internal = "gitlab." + "atlasgroup.ai"
+text_suffixes = {".md", ".json", ".py", ".sh", ".yml", ".yaml", ".toml"}
+for path in out.rglob("*"):
+    if not path.is_file() or path.suffix.lower() not in text_suffixes:
+        continue
+    if internal in path.read_text(errors="ignore"):
+        sys.exit(f"export contains an internal URL in {path.relative_to(out)}")
 PY
 
 echo "exported $OUT"
