@@ -20,7 +20,7 @@ Skills are scoped so that a task loads only the context it needs. `twelvedata-ap
 
 ## Prerequisites
 
-1. A clone of this repository (private GitLab for now; a public GitHub mirror may come later — see [ROADMAP.md](./ROADMAP.md)).
+1. A clone of this repository: https://github.com/MazeBraker/twelvedata-skills
 2. Node.js 18+ if installing individual skills with `npx skills`.
 3. An agent client that loads Agent Skills (Cursor, Claude Code, Codex, or compatible).
 4. A Twelve Data account from [twelvedata.com/register](https://twelvedata.com/register). Local API key setups also need your API key. Hosted Cursor and Codex plugins use browser login instead.
@@ -38,15 +38,8 @@ All skills in this repo use that single name for local key-based access. The hos
 ### 1. Get the repository
 
 ```bash
-git clone https://gitlab.atlasgroup.ai/twelvedata/skills.git
-cd skills
-```
-
-If the latest work is still on a feature branch (for example `skills-v1`):
-
-```bash
-git fetch origin
-git checkout skills-v1
+git clone https://github.com/MazeBraker/twelvedata-skills.git
+cd twelvedata-skills
 ```
 
 ### 2. See what is available (no install yet)

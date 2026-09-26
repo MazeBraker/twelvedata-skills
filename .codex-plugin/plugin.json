@@ -8,7 +8,7 @@
     "url": "https://twelvedata.com"
   },
   "homepage": "https://twelvedata.com",
-  "repository": "https://gitlab.atlasgroup.ai/twelvedata/skills",
+  "repository": "https://github.com/MazeBraker/twelvedata-skills",
   "license": "MIT",
   "skills": "./skills/",
   "mcpServers": "./.mcp.json",

@@ -42,7 +42,7 @@ Done when the repository installs as a plugin, not only as loose skills.
 
 ## 6. Publishing on opensource?
 
-Not decided yet, and nothing in the repository claims otherwise until it is. For now this is a private GitLab project installed from a local clone.
+The public mirror is https://github.com/MazeBraker/twelvedata-skills. It is a personal publication, not the Twelve Data organization repository.
 
 What has to be in place before it can be opened:
 
