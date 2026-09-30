@@ -121,7 +121,12 @@ codex plugin add twelvedata@twelvedata-skills
 
 Open Codex, authenticate the Twelve Data MCP server when prompted, and confirm the seven plugin skills and `twelvedata` MCP tools are available. Then ask for an AAPL quote and AAPL RSI. To remove the plugin or the MCP-only server: `codex plugin remove twelvedata@twelvedata-skills` and `codex mcp remove twelvedata`.
 
-This local marketplace is for testing and does not publish the plugin to the public ChatGPT/Codex directory. After a reviewed public GitHub mirror exists, install from that Git URL with `codex plugin marketplace add <github-url>` and `codex plugin add twelvedata@twelvedata-skills`. Do not treat a local plugin as a global catalog listing.
+This local export is for a checkout on this machine. The public plugin repository is https://github.com/MazeBraker/twelvedata-skills. Install from that URL:
+
+```bash
+codex plugin marketplace add https://github.com/MazeBraker/twelvedata-skills
+codex plugin add twelvedata@twelvedata-skills
+```
 
 ### Optional: install as a plugin
 
@@ -145,7 +150,7 @@ cp -R .plugin-export/. ~/.cursor/plugins/local/twelvedata/
 
 Then reload the window and check Customize → Skills / MCP for the seven skills and the `twelvedata` server. If it is missing on a managed team account, ask an admin to enable local plugin imports. Sign in with a Twelve Data account and ask for an AAPL quote and 30 daily AAPL bars. Confirm that both tools return data. Disconnect the server, reconnect, and repeat the quote.
 
-For the public Cursor Marketplace, publish a clean, MIT-licensed mirror of this repository on GitHub, update the plugin manifest's `repository` link to that public URL, review the bundled Twelve Data logo for brand approval, and submit it at [cursor.com/marketplace/publish](https://cursor.com/marketplace/publish). Submission is pending a Twelve Data corporate Cursor publisher account, review of the [publisher terms](https://cursor.com/marketplace-publisher-terms), the public mirror, and Cursor's approval. Local testing does not create a public listing. The community [cursor.directory](https://cursor.directory/plugins/mcp-twelve-data-mcp-server) card is a separate listing and is not Marketplace status.
+The public Cursor plugin repository is https://github.com/MazeBraker/twelvedata-skills. Submit that repository at [cursor.com/marketplace/publish](https://cursor.com/marketplace/publish). The community [cursor.directory](https://cursor.directory/plugins/mcp-twelve-data-mcp-server) card is a separate directory.
 
 ### Remove a skill
 

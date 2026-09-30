@@ -42,13 +42,12 @@ Done when the repository installs as a plugin, not only as loose skills.
 
 ## 6. Publishing on opensource?
 
-The public mirror is https://github.com/MazeBraker/twelvedata-skills. It is a personal publication, not the Twelve Data organization repository.
+The public plugin repository is https://github.com/MazeBraker/twelvedata-skills.
 
-What has to be in place before it can be opened:
+Still open before skills.sh discovery from an organization name:
 
-- Sign-off from the owner on publishing the content, and agreement with the owner of [twelvedata-clawhub](https://github.com/twelvedata/twelvedata-clawhub) so there are not two diverging official skill sets.
-- A public GitHub mirror with publish access to the `twelvedata` organisation, because `npx skills update` has historically been GitHub-only and skills.sh discovery needs a public repository.
-- `metadata` in the frontmatter with author, version and repository, once those URLs actually exist.
+- Agreement with the owner of [twelvedata-clawhub](https://github.com/twelvedata/twelvedata-clawhub) so there are not two diverging skill sets.
+- `metadata` in the frontmatter with author, version and repository.
 - README rewritten around `npx skills add twelvedata/skills` instead of the local clone.
 - A smoke test on a clean machine: install from the public URL into an empty project and confirm the skills activate.
 
