@@ -9,10 +9,10 @@ Rules that apply across endpoints. For endpoint specifics see the `twelvedata-ap
 
 ## Budget credits with `/api_usage`
 
-Credits are consumed per symbol per request. Plans limit credits per minute and sometimes per day.
+Credits are not always 1 and not always per symbol. A quote and `/time_series` are 1 per symbol. `/exchange_schedule` is 100 per request. A fund full document is 800 or 1000 per request. The priced list is in `twelvedata-api`. Plans limit credits per minute and sometimes per day.
 
-1. Prefer `POST /batch` over a per-symbol loop.
-2. Set `outputsize` to what you will display. Default is `30`; do not habitually request `5000`.
+1. `POST /batch` costs the sum of its parts. It does not reduce credits versus one call per symbol. Use it to cut round trips.
+2. Set `outputsize` to what you will display. With no date range the default is `30`. With a date range and no `outputsize` the default becomes the maximum, `5000`. That is still one credit per symbol, but a large payload. Do not habitually request `5000`.
 3. Cache data that does not change intraday: instrument metadata, exchange schedules, fundamentals, fund composition.
 4. In scheduled jobs call `/api_usage` and stop when `current_usage` approaches `plan_limit` (and check `daily_usage` vs `plan_daily_limit` when present). Do not wait for a `429` to discover the ceiling.
 
@@ -27,22 +27,22 @@ On Twelve Data, `403` means the endpoint or data is not in the plan. `429` means
 
 ## Timezone parameter
 
-Datetimes come back in the exchange timezone unless you pass `timezone`. The value must be a case-sensitive IANA name such as `America/New_York` or `UTC`. Abbreviations like `EST` or `ET` are invalid for this parameter. Pass the same explicit `timezone` on every series you will compare.
+For intraday bars, datetimes come back in the exchange timezone unless you pass `timezone`. For `1day`, `1week` and `1month`, the returned datetime stays in the exchange's local time even if you pass `timezone`. That parameter still changes how `start_date` and `end_date` are read. `datetime` is when the bar opened, not when it closed. The value must be a case-sensitive IANA name such as `America/New_York` or `UTC`. Abbreviations like `EST` or `ET` are invalid for this parameter. Pass the same explicit `timezone` on every series you will compare.
 
 Whenever the user compares or correlates two instruments, always state both of these in the same answer: (1) equal series length does not mean the same calendar dates, and (2) join on the datetime index, never by row position. Timezone mistakes and positional zips are separate bugs; fix both.
 
 ## Aligning several instruments
 
-Equal-length series are not the same dates: exchanges have different holidays. Request the same `interval` and an explicit date range, join on the datetime index (not by row position), and say whether gaps were dropped or filled. Say this explicitly even when the main complaint looks like a timezone bug.
+Equal-length series are not the same dates: exchanges have different holidays. Request the same `interval` and an explicit date range, join on the datetime index (not by row position), and say whether gaps were dropped or filled. `order` defaults to `desc`, so row 0 is the newest bar unless you pass `order=asc`. Say this explicitly even when the main complaint looks like a timezone bug.
 
 ## Missing data
 
-`null` means the metric is unavailable for that row, not that the request failed. Substituting zero creates a fake price move. Surface the gap instead.
+`null` means the metric is unavailable for that row, not that the request failed. Substituting zero creates a fake price move. Surface the gap instead. In `/time_series`, `open`, `high`, `low`, `close` and `volume` are strings. Parse them before arithmetic.
 
 ## Corporate actions
 
-A raw price series has discontinuities at splits. For long-window returns, adjust with `/splits` and `/dividends` or state that the series is unadjusted. Both default to `range=last` and return a single event, so request `range=full` (or an explicit date range) covering the window, otherwise the adjustment silently misses older events.
+`/time_series` `adjust` is `all`, `splits`, `dividends`, or `none`. The default is `splits`. Omitted `adjust` is that default, not `none`. `/splits` and `/dividends` default to `range=last` and return a single event, so request `range=full` (or an explicit date range) covering the window. A `403` from those endpoints means the plan does not include them. It does not mean the window had no split.
 
 ## Reporting the result
 
-State the interval, the timezone and the as-of timestamp. If a plan limit or batch quota truncated the payload, say so instead of presenting a partial answer as complete.
+State the interval, the timezone, the `adjust` value and the as-of timestamp. If a plan limit or batch quota truncated the payload, say so instead of presenting a partial answer as complete.

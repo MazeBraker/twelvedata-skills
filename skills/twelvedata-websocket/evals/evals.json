@@ -10,17 +10,18 @@
         "Subscribes only after the connection is open",
         "Sends periodic heartbeat events",
         "Handles status events in addition to price events",
+        "Reads a rejected symbol from the status event fails list",
         "Reuses a single connection instead of one per symbol"
       ]
     },
     {
       "id": 2,
       "prompt": "Our Twelve Data websocket keeps dropping after a couple of minutes and sometimes stops sending data entirely when we deploy. Any idea why?",
-      "expected_output": "Points at missing heartbeats and at the three connection limit, where a new deployment silently closes the oldest connection.",
+      "expected_output": "Points at missing heartbeats and at the three connection limit, where opening another connection closes the previous ones.",
       "files": [],
       "assertions": [
         "Mentions the heartbeat requirement",
-        "Mentions the limit of three connections per API key and that a new one closes the oldest",
+        "Mentions the limit of three connections per API key and that opening another closes the previous connections",
         "Does not attribute the problem to rate limits on the REST API"
       ]
     },

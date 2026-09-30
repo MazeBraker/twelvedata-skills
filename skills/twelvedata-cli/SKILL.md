@@ -56,6 +56,8 @@ twelvedata api-usage
 twelvedata doctor --raw
 ```
 
+`time-series` and `ti` use the REST defaults from `twelvedata-api`. `order` is `desc`, so row 0 is the newest bar. `adjust` defaults to `splits`. Discover the flag names with `twelvedata commands` before adding them.
+
 `--output csv` streams CSV; default is JSON. For FX rates prefer `exchange-rate` / `currency-conversion`, not `quote`/`price` payloads.
 
 ## Gotchas

@@ -4,19 +4,20 @@
     {
       "id": 1,
       "prompt": "Get me the last 6 months of daily prices for Apple from Twelve Data and save them to a CSV.",
-      "expected_output": "A call to /time_series with interval=1day and an explicit outputsize or date range, authenticated with the key from an environment variable.",
+      "expected_output": "A call to /time_series with interval=1day and an explicit outputsize or date range, authenticated with the key from an environment variable. order defaults to desc, so the first row is the newest bar unless order=asc is set. adjust defaults to splits.",
       "files": [],
       "assertions": [
         "Uses the /time_series endpoint",
         "Sets outputsize or a date range explicitly instead of relying on the default of 30",
         "Reads the API key from an environment variable rather than hardcoding it",
-        "Does not invent parameters that are not part of the endpoint"
+        "Does not invent parameters that are not part of the endpoint",
+        "Does not treat the first row as the oldest bar unless order=asc is set"
       ]
     },
     {
       "id": 2,
       "prompt": "Pull the current price for Tesla, Royal Bank of Canada and the euro against the dollar using Twelve Data. Show the exact requests you would send; do not only describe the plan.",
-      "expected_output": "Resolves the ambiguous Royal Bank listing via /symbol_search or an exchange qualifier, and batches the requests instead of looping.",
+      "expected_output": "Resolves the ambiguous Royal Bank listing via /symbol_search or an exchange qualifier. POST /batch is optional and does not cost less than one call per symbol.",
       "files": [],
       "assertions": [
         "Resolves the company name to a ticker with /symbol_search or passes exchange or mic_code",

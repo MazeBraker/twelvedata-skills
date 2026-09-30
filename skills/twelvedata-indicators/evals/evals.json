@@ -9,7 +9,8 @@
       "assertions": [
         "Calls the /rsi endpoint",
         "Passes time_period=14 and interval=1day",
-        "Does not fetch raw candles and compute RSI in code"
+        "Does not fetch raw candles and compute RSI in code",
+        "Says a simple average of up and down closes does not match /rsi"
       ]
     },
     {

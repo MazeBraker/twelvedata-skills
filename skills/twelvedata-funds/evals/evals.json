@@ -9,6 +9,7 @@
       "assertions": [
         "Looks the fund up in a directory endpoint before requesting data",
         "Uses /etfs/world/composition instead of /etfs/world for a holdings question",
+        "Does not claim the full /etfs/world document costs the same as the composition view",
         "Notes that fund composition is reported on a lag rather than live"
       ]
     },
@@ -31,7 +32,8 @@
       "assertions": [
         "Uses /time_series for the price history",
         "Does not attempt to get a price series from /etfs/world",
-        "Sets an explicit outputsize or date range for a year of daily data"
+        "Sets an explicit outputsize or date range for a year of daily data",
+        "Does not treat the first /time_series row as the oldest bar unless order=asc is set"
       ]
     }
   ]

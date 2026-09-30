@@ -69,7 +69,7 @@ curl -H "Authorization: apikey $TWELVE_DATA_API_KEY" \
 
 ## Credits and limits
 
-Each endpoint costs API credits, usually 1 per symbol per request, and the plan defines credits per minute and sometimes per day. Check the current state with `/api_usage`, which returns `current_usage`, `plan_limit`, `daily_usage`, `plan_daily_limit` and `plan_category`.
+Each endpoint costs API credits, usually 1 per symbol per request, and the plan defines credits per minute and sometimes per day. Fund full documents are not that usual case: `/etfs/world` is 800, and `/mutual_funds/world` and `/money_market_funds/world` are 1000. See `twelvedata-funds`. Check the current state with `/api_usage`, which returns `current_usage`, `plan_limit`, `daily_usage`, `plan_daily_limit` and `plan_category`.
 
 Before writing a loop over symbols, use `/batch` instead.
 
@@ -108,11 +108,16 @@ If the batch exceeds the remaining quota, only part of the data comes back. Chec
 
 ## Gotchas
 
-- `outputsize` defaults to `30` for time series and indicators, with a maximum of `5000`. Set it explicitly or the chart silently covers 30 points.
+- `outputsize` defaults to `30` for time series and indicators, with a maximum of `5000`. Set it explicitly or the chart silently covers 30 points. When no date range is set, that default is 30; with a date range and no `outputsize`, the default becomes the maximum.
+- `/time_series` `adjust` is `all`, `splits`, `dividends`, or `none`. The default is `splits`. Omitted `adjust` is that default, not `none`. `open`, `high`, `low`, `close` and `volume` come back as strings.
+- `order` defaults to `desc`, newest bar first. Pass `order=asc` when row 0 must be the oldest. Do not treat the first row as the start of the window.
+- `format` defaults to JSON. CSV `delimiter` defaults to `;`, not a comma.
 - Financial statement endpoints default to `6` records and `/earnings` to `10`. These are different defaults, do not assume one number.
 - `/dividends` and `/splits` have no `outputsize`. They take `range`, which defaults to `last`, so a plain request returns only the most recent event. Pass `range` (`1m` to `5y`, or `full`) or `start_date` / `end_date` for a history.
 - `null` in a response field means the metric is unavailable, not an error. Handle it instead of failing.
-- Statements have consolidated variants at `/income_statement/consolidated`, `/balance_sheet/consolidated` and `/cash_flow/consolidated`. Pick deliberately.
+- Statements have consolidated variants at `/income_statement/consolidated`, `/balance_sheet/consolidated` and `/cash_flow/consolidated`. Pick deliberately. Each of those six costs 100 credits per symbol, not 1.
+- Other common calls that are not 1 credit: `/profile` is 10 per symbol, `/dividends`, `/splits` and `/earnings` are 20 per symbol, `/dividends_calendar`, `/splits_calendar`, `/earnings_calendar` and `/ipo_calendar` are 40, `/statistics` is 50 per symbol, and `/key_executives` is 1000 per symbol.
+- `/exchanges` is 1 credit. `/exchange_schedule` and `/market_movers/{market}` are 100 per request. `/cross_listings` is 40 per request. `/market_cap` and `/time_series/cross` are 5 per request.
 - Historical data and calendars are separate endpoints. `/earnings` is what a company reported, `/earnings_calendar` is what is scheduled. Same split for `/dividends` and `/splits`.
 - Parameter names are case-insensitive, and endpoints that accept several values take them comma separated.
 - Do not compute an indicator from raw candles when Twelve Data exposes it directly, see the `twelvedata-indicators` skill.

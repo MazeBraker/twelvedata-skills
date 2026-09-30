@@ -96,7 +96,7 @@ The agent should follow the skill (env key, concrete endpoints/flags). If it ign
 
 The root `mcp.json` is a template for local clients. Merge it into `~/.cursor/mcp.json` (or the project `.cursor/mcp.json`), keep the key in `TWELVE_DATA_API_KEY`, restart Cursor, and confirm the `twelvedata` server is connected. Details: `twelvedata-mcp` skill. Cursor interpolates `${env:TWELVE_DATA_API_KEY}` — a bare `${VAR}` will not resolve.
 
-The Cursor plugin instead uses `.cursor-plugin/mcp.json` to connect to our [hosted MCP server](https://mcp.twelvedata.com/mcp). Cursor should prompt for Twelve Data OAuth login in your browser; no API key or `uv` is needed for this path. `https://mcp.twelvedata.com` does not issue tokens. The client must follow the protected-resource metadata to the authorization server at `https://auth.twelvedata.com`. For help, use [Twelve Data support](https://twelvedata.com/contact); see our [privacy policy](https://twelvedata.com/privacy).
+The Cursor plugin instead uses `.cursor-plugin/mcp.json` to connect to our [hosted MCP server](https://mcp.twelvedata.com/mcp). Cursor should prompt for Twelve Data OAuth login in your browser; no API key or `uv` is needed for this path. The MCP host does not issue tokens. Connect only to `https://mcp.twelvedata.com/mcp` and follow its protected-resource metadata to `https://auth.twelvedata.com`. The host root answers 404. For help, use [Twelve Data support](https://twelvedata.com/contact); see our [privacy policy](https://twelvedata.com/privacy).
 
 ### Codex: hosted MCP server
 
@@ -107,7 +107,7 @@ codex mcp add twelvedata --url https://mcp.twelvedata.com/mcp
 codex mcp list
 ```
 
-The `add` command starts OAuth; sign in with your own Twelve Data account in the browser. `https://mcp.twelvedata.com` does not issue tokens. The client must follow the protected-resource metadata to the authorization server at `https://auth.twelvedata.com`. Run `codex mcp login twelvedata` if you need to authorize again later. The hosted server uses per-user OAuth; you do not need to put an API key in Codex configuration. Codex desktop, CLI, and IDE extension share the same MCP configuration. In Codex, use `/mcp` to check that `twelvedata` is connected, then ask for an AAPL quote and AAPL RSI. To disconnect, run `codex mcp remove twelvedata`.
+The `add` command starts OAuth; sign in with your own Twelve Data account in the browser. The MCP host does not issue tokens. Connect only to `https://mcp.twelvedata.com/mcp` and follow its protected-resource metadata to `https://auth.twelvedata.com`. The host root answers 404. Run `codex mcp login twelvedata` if you need to authorize again later. The hosted server uses per-user OAuth; you do not need to put an API key in Codex configuration. Codex desktop, CLI, and IDE extension share the same MCP configuration. In Codex, use `/mcp` to check that `twelvedata` is connected, then ask for an AAPL quote and AAPL RSI. To disconnect, run `codex mcp remove twelvedata`.
 
 ### Codex: skills and hosted MCP as a plugin
 

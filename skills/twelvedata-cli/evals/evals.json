@@ -10,7 +10,8 @@
         "Uses the twelvedata CLI binary (not raw curl to api.twelvedata.com as the primary path)",
         "Authenticates through the TWELVEDATA_API_KEY environment variable rather than passing --api-key on the command line",
         "Runs time-series with interval 1day and outputsize 30 (or equivalent flags)",
-        "Does not rely on interactive twelvedata login as the only auth method for CI"
+        "Does not rely on interactive twelvedata login as the only auth method for CI",
+        "Says the first bar is the newest unless an ascending order is requested"
       ]
     },
     {

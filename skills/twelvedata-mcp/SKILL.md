@@ -34,7 +34,7 @@ codex mcp add twelvedata --url https://mcp.twelvedata.com/mcp
 
 The `add` command starts OAuth in the browser. Use `codex mcp login twelvedata` later to authorize again if needed, and `codex mcp remove twelvedata` to disconnect. After login, ask for an AAPL quote and AAPL RSI.
 
-`https://mcp.twelvedata.com` does not issue tokens. The client must follow the protected-resource metadata to the authorization server at `https://auth.twelvedata.com`. Do not point a connector at this host's `/register` or `/.well-known/oauth-authorization-server`.
+The MCP host does not issue tokens. Connect only to `https://mcp.twelvedata.com/mcp` and follow its protected-resource metadata to `https://auth.twelvedata.com`. Do not point a connector at the host root (it answers 404), or at this host's `/register` or `/.well-known/oauth-authorization-server`.
 
 For the seven skills and the hosted MCP connection together, install the Codex plugin from the clean local export as described in this repository's README.
 
@@ -74,7 +74,8 @@ Use raw REST when neither is available, or for a one-off `curl`. Follow the rule
 - The interpolation syntax is `${env:VAR}`. A bare `${VAR}` is not an environment variable in Cursor `mcp.json`, so the server starts with an unusable key. Inside a Cursor plugin `${VAR}` means a plugin variable that has to be declared in `variables` first.
 - `uvx` needs `uv` installed. If the client reports that the command was not found, that is the cause, not the API key.
 - Pin `--python 3.13`. Default `python3` on Homebrew may be 3.14, and `mcp-server-twelve-data` requires `>=3.13`.
-- MCP does not change plan limits. A tool call can still fail with `403` because the endpoint is not in the plan, or `429` because credits ran out.
+- MCP does not change plan limits or credit prices. A tool call can still fail with `403` because the endpoint is not in the plan, or `429` because credits ran out. `/key_executives` is still 1000 credits per symbol, and a fund full document is still 800 or 1000 per request. See `twelvedata-api`.
+- The server requests `format=CSV` and does not set `delimiter`. When the API returns CSV, the tool result is that text, not a JSON object. The default separator is a semicolon, not a comma. A JSON object means that endpoint did not return CSV.
 - Streaming still goes through WebSocket, see the `twelvedata-websocket` skill.
 - Twelve Data also ships integrations for ChatGPT, OpenClaw and NEAR AI. They are separate products, not alternatives to this server for IDE work.
 

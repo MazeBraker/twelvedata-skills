@@ -20,7 +20,7 @@ curl -H "Authorization: apikey $TWELVE_DATA_API_KEY" \
   "https://api.twelvedata.com/rsi?symbol=AAPL&interval=1day&time_period=14&outputsize=30"
 ```
 
-Fetching candles and recomputing RSI in pandas costs the same credits, adds a dependency, and produces values that disagree with the rest of the platform because of different warm-up handling. Use the endpoint.
+Fetching candles and recomputing RSI in pandas costs the same credits, adds a dependency, and produces values that disagree with the rest of the platform because of different warm-up handling. Use the endpoint. `/rsi` uses Wilder smoothing. A simple average of the last 14 up and down closes does not match it.
 
 ## Warm-up example (SMA 200, show last 30)
 
@@ -35,8 +35,11 @@ curl -H "Authorization: apikey $TWELVE_DATA_API_KEY" \
 
 - `symbol` and `interval` behave exactly as in `/time_series`
 - `series_type` selects the input price, usually `close`, also `open`, `high`, `low`
+- `order` defaults to `desc`, newest point first, same as `/time_series`
 - `time_period` is the lookback where the indicator has one
-- `outputsize` defaults to `30`, maximum `5000`
+- `outputsize` defaults to `30` when no date parameters are set, otherwise to the maximum `5000`
+- `adjust` is `all`, `splits`, `dividends`, or `none`, default `splits`, same as `/time_series`
+- `timezone` does not move `1day`, `1week`, or `1month` output dates; it still changes how `start_date` and `end_date` are read
 - date filtering with `start_date` and `end_date` works the same way
 
 ## Endpoint names
@@ -50,7 +53,7 @@ The naming is not always guessable, so check `references/endpoints.md` before as
 - MACD comes in three flavours. `/macd` uses fixed EMA types, `/macdext` lets you choose them, `/macd_slope` returns the slope. Prefer `/macdext` when the user wants to control moving-average types, and say in the answer that `/macd` keeps fixed types. Do not treat `/macd_slope` as the same thing.
 - `/stoch`, `/stochf` and `/stochrsi` are different indicators, not aliases.
 - `/percent_b` needs the same band parameters as `/bbands` to be comparable with it.
-- Indicators are computed per symbol, so a multi-symbol request costs credits per symbol. Batch them through `/batch`, see the `twelvedata-api` skill.
+- Indicators are computed per symbol, so each symbol costs one credit. `/batch` sums those credits and only cuts round trips.
 - Values depend on the `interval`. Never mix intervals when comparing signals across instruments.
 
 ## Reference

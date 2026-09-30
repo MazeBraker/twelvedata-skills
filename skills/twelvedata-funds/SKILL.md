@@ -33,7 +33,7 @@ ETFs: `/etfs/list` directory, `/etfs/world` full data, and the focused views `/e
 
 Mutual funds: `/mutual_funds/list` directory, `/mutual_funds/world` full data, and the views `/mutual_funds/world/summary`, `/mutual_funds/world/performance`, `/mutual_funds/world/risk`, `/mutual_funds/world/ratings`, `/mutual_funds/world/composition`, `/mutual_funds/world/purchase_info`, `/mutual_funds/world/sustainability`. Grouping lives in `/mutual_funds/family` and `/mutual_funds/type`.
 
-Money market funds: `/money_market_funds/list` and `/money_market_funds/world`.
+Money market funds: `/money_market_funds/list` and `/money_market_funds/world`. The full document costs 1000 credits and is on the Ultra plan for individuals and the Enterprise plan for business, and above.
 
 ## Vanguard (or any family) without tickers
 
@@ -52,7 +52,7 @@ curl -H "Authorization: apikey $TWELVE_DATA_API_KEY" \
 
 ## Pick the narrow endpoint
 
-`/etfs/world` and `/mutual_funds/world` return the full document, which is large. If the user asks only about returns or holdings, call `/etfs/world/performance` or `/etfs/world/composition` instead. It costs the same credits but keeps the response small enough to reason about.
+`/etfs/world` costs 800 credits and `/mutual_funds/world` costs 1000. Both return the full document and are on the Ultra plan for individuals and the Enterprise plan for business, and above. If the user asks only about returns or holdings, call the performance or composition view: `/etfs/world/performance` and `/etfs/world/composition` cost 200 each, and so do `/mutual_funds/world/performance` and `/mutual_funds/world/composition`.
 
 ## Gotchas
 
